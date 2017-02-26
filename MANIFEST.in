@@ -1,0 +1,1 @@
+recursive-include jupyter_video_widget/static *.*
