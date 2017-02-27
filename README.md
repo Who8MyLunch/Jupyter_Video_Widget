@@ -11,8 +11,14 @@ A Jupyter widget to play videos via HTML5 video player.
 - [Cookiecutter template](https://github.com/jupyter-widgets/widget-cookiecutter)
 
 
+## Prerequisites
 
-## Installation
+```bash
+jupyter nbextension enable --py --sys-prefix widgetsnbextension
+```
+
+## Standard Installation
+
 
 To install use pip:
 
@@ -21,7 +27,9 @@ pip install jupyter_video_widget
 jupyter nbextension enable --py --sys-prefix jupyter_video_widget
 ```
 
-For a development installation (requires npm),
+## Developer Installation
+
+Development installation requires npm.
 
 ```bash
 git clone https://github.com/who8mylunch/jupyter_video_widget.git
@@ -33,12 +41,23 @@ jupyter nbextension enable  --py           --sys-prefix jupyter_video_widget
 
 ## Developer Workflow
 
-not really sure what to do.  
+not really sure what to do. 
 npm plays a role, somehow...
 
+Everythinh is done through setup.py??
 
 
 
 ## Ideas
 
 - file selection compound widget: https://gist.github.com/DrDub/6efba6e522302e43d055
+
+
+# Developing
+
+## Python
+
+## JavaScript
+
+
+

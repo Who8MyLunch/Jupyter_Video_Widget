@@ -22,7 +22,7 @@ log.set_verbosity(log.DEBUG)
 log.info('setup.py entered')
 log.info('$PATH=%s' % os.environ['PATH'])
 
-LONG_DESCRIPTION = 'A Custom Jupyter Widget Library'
+LONG_DESCRIPTION = 'A Jupyter widget for HTML5 video playback'
 
 def js_prerelease(command, strict=False):
     """decorator for building minified js/css prior to another command"""
@@ -118,7 +118,7 @@ with open(os.path.join(here, 'jupyter_video_widget', '_version.py')) as f:
 setup_args = {
     'name': 'jupyter_video_widget',
     'version': version_ns['__version__'],
-    'description': 'A Custom Jupyter Widget Library',
+    'description': 'A Jupyter Video Widget',
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
@@ -142,23 +142,21 @@ setup_args = {
 
     'author': 'Pierre Villeneuve',
     'author_email': 'pierre.villeneuve@gmail.com',
-    'url': 'http://jupyter.org',
-    'keywords': [
-        'ipython',
-        'jupyter',
-        'widgets',
-    ],
+    'url': 'http://smokedbits.com',
+    'keywords': ['ipython', 'jupyter', 'widgets', 'video', 'html5'],
     'classifiers': [
         'Development Status :: 4 - Beta',
         'Framework :: Jupyter',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
-        'Topic :: Multimedia :: Graphics',
+        'Topic :: Multimedia :: Video',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
 }
+
+#------------------------------------------------
 
 setup(**setup_args)
