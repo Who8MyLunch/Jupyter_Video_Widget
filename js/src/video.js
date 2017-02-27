@@ -8,13 +8,13 @@ var _ = require('underscore');
 //
 // When serialiazing entire widget state for embedding, only values different from the
 // defaults will be specified.
-var HelloModel = widgets.DOMWidgetModel.extend({
+var VideoModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {
-        _model_name : 'VideoModel',
-        _view_name : 'VideoView',
-        _model_module : 'jupyter_video_widget',
-        _view_module : 'jupyter_video_widget',
-        url : 'Hello World'
+        _model_name: 'VideoModel',
+        _view_name: 'VideoView',
+        _model_module: 'jupyter_video_widget',
+        _view_module: 'jupyter_video_widget',
+        url: 'Hello World, eh?'
     })
 });
 
@@ -22,7 +22,7 @@ var HelloModel = widgets.DOMWidgetModel.extend({
 // Custom View. Renders the widget model.
 var VideoView = widgets.DOMWidgetView.extend({
     render: function() {
-        this.value_changed();
+        this.url_changed();
         this.model.on('change:url', this.url_changed, this);
     },
 
@@ -33,6 +33,6 @@ var VideoView = widgets.DOMWidgetView.extend({
 
 
 module.exports = {
-    VideoModel : VideoModel,
-    VideoView : VideoView
+    VideoModel: VideoModel,
+    VideoView: VideoView
 };

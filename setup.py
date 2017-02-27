@@ -118,7 +118,7 @@ with open(os.path.join(here, 'jupyter_video_widget', '_version.py')) as f:
 setup_args = {
     'name': 'jupyter_video_widget',
     'version': version_ns['__version__'],
-    'description': 'A Jupyter Video Widget',
+    'description': 'A Jupyter HTML5 Video Widget',
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [

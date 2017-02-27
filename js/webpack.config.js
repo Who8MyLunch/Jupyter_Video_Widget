@@ -26,8 +26,7 @@ module.exports = [
     {// Bundle for the notebook containing the custom widget views and models
      //
      // This bundle contains the implementation for the custom widget views and
-     // custom widget.
-     // It must be an amd module
+     // custom widget. It must be an amd module.
      //
         entry: './src/index.js',
         output: {

@@ -12,4 +12,4 @@ class Video(widgets.DOMWidget):
     _view_module = Unicode('jupyter_video_widget').tag(sync=True)
     _model_module = Unicode('jupyter_video_widget').tag(sync=True)
 
-    url = Unicode('Hello World!').tag(sync=True)
+    url = Unicode('Hello World!, sadafsaf').tag(sync=True)
