@@ -39,12 +39,29 @@ jupyter nbextension install --py --symlink --sys-prefix jupyter_video_widget
 jupyter nbextension enable  --py           --sys-prefix jupyter_video_widget
 ```
 
-## Developer Workflow
+# Developer Workflow
 
-not really sure what to do. 
-npm plays a role, somehow...
+## Which Files to Edit?##
 
-Everythinh is done through setup.py??
+- Jupyter_Video_Widget/
+    - jupyter_video_widget/     *All Python code lives here*
+        - static/
+        - __init__.py           *import from Python module(s)
+        - _version.py
+        - example.py:           *Implement backend widget components here.  Rename as desired.*
+    - js/                       *All JavaScript code lives here*
+        - dist/
+        - node_modules/
+        - src/
+            - embed.js          *Only edit to update exported module name (e.g. example.js)*
+            - example.js        *Implement front-end widget components here.  Rename as desired.*
+            - extension.js
+            - index.js          *Only edit to update exported module name (e.g. example.js)*
+        - README.md
+        - package.json          *Double check author name, email address, github org., etc.*
+        - webpack.config.js 
+
+## After Making an Edit
 
 
 
@@ -52,12 +69,6 @@ Everythinh is done through setup.py??
 
 - file selection compound widget: https://gist.github.com/DrDub/6efba6e522302e43d055
 
-
-# Developing
-
-## Python
-
-## JavaScript
 
 
 

@@ -22,7 +22,7 @@ log.set_verbosity(log.DEBUG)
 log.info('setup.py entered')
 log.info('$PATH=%s' % os.environ['PATH'])
 
-LONG_DESCRIPTION = 'A Jupyter widget for HTML5 video playback'
+LONG_DESCRIPTION = 'A Jupyter widget for HTML5 video player'
 
 def js_prerelease(command, strict=False):
     """decorator for building minified js/css prior to another command"""

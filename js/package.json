@@ -1,7 +1,7 @@
 {
   "name": "jupyter_video_widget",
   "version": "0.0.1",
-  "description": "Jupyter Video Widget",
+  "description": "Jupyter widget for HMTL5 video player ",
   "author": "Pierre Villeneuve",
   "main": "src/index.js",
   "repository": {
