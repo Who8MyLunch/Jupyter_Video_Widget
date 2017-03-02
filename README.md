@@ -65,7 +65,6 @@ jupyter nbextension enable  --py           --sys-prefix jupyter_video_widget
 
 ## After Making an Edit
 
-[meager instructions](https://ipywidgets.readthedocs.io/en/latest/dev_install.html#rebuild-after-making-changes)
 
 
 ## Ideas
