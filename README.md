@@ -21,8 +21,7 @@ jupyter nbextension enable --py --sys-prefix widgetsnbextension
 
 ## Standard Installation
 
-
-To install use pip:
+Use pip to install:
 
 ```bash
 pip install jupyter_video_widget
@@ -65,7 +64,14 @@ jupyter nbextension enable  --py           --sys-prefix jupyter_video_widget
 
 ## After Making an Edit
 
+Change to the `js` folder and enter the following command:
 
+```bash
+npm install --save
+```
+
+This prepares and packages all JavaScript components and installs them into the `static` folder up
+and over on the Pythoin side. 
 
 ## Ideas
 
