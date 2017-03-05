@@ -1,8 +1,9 @@
 {
   "name": "jupyter_video_widget",
   "version": "0.0.1",
-  "description": "Jupyter widget as HMTL5 video player",
+  "description": "HMTL5 video player widget",
   "author": "Pierre Villeneuve",
+  "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -12,8 +13,8 @@
     "jupyter",
     "widgets",
     "ipython",
-    "ipywidgets"
-    "html5"
+    "ipywidgets",
+    "html5",
     "video"
   ],
   "scripts": {
