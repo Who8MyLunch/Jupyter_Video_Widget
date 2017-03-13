@@ -40,14 +40,14 @@ var VideoModel = widgets.DOMWidgetModel.extend({
         _view_name: 'VideoView',
         _model_module: 'jupyter_video_widget',
         _view_module: 'jupyter_video_widget',
-        _model_module_version : '0.0.1',
-        _view_module_version : '0.0.1',
-        src: '',
-        currentTime: 0.0,
-        playPause: false,
-        _method: [],
-        _property: [],
-        _event: {},
+        // _model_module_version : '0.1.0',
+        // _view_module_version : '0.1.0',
+        // src: '',
+        // currentTime: 0.0,
+        // playPause: false,
+        // _method: [],
+        // _property: [],
+        // _event: {},
     })
 });
 
@@ -89,7 +89,7 @@ var VideoView = widgets.DOMWidgetView.extend({
 
         this.model.on('change:_method', this.invoke_method, this);
         this.model.on('change:_property', this.set_property, this);
-        this.model.on('change:_playPause', this.playPause_changed, this);
+        this.model.on('change:_play_pause', this.playPause_changed, this);
         this.model.on('change:src', this.src_changed, this);
         this.model.on('change:currentTime', this.currentTime_changed, this);
 
@@ -188,7 +188,7 @@ var VideoView = widgets.DOMWidgetView.extend({
         // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
         var fields = ['autoplay', 'clientHeight', 'clientWidth', 'controls', 'currentTime',
                       'currentSrc', 'duration', 'ended', 'loop', 'muted', 'paused', 'playbackRate',
-                      'seeking', 'videoHeight', 'videoWidth', 'volume']
+                      'readyState', 'seeking', 'videoHeight', 'videoWidth', 'volume']
 
         var pev = {'type': ev.type};
         for (let f of fields) {
