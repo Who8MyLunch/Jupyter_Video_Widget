@@ -1,18 +1,34 @@
-- To release a new version of jupyter_video_widget on PyPI:
+# Release
 
-Update _version.py (set release version, remove 'dev')
-git add and git commit
+## To release a new version of jupyter_video_widget on PyPI:
+
+Update _version.py (set release version, remove 'dev') and then:
+
+```bash
+git add <any new stuff>
+git commit -a
+
 python setup.py sdist upload
 python setup.py bdist_wheel upload
+
 git tag -a X.X.X -m 'comment'
-Update _version.py (add 'dev' and increment minor)
-git add and git commit
+```
+
+Update _version.py (add 'dev' and increment minor) and then:
+
+```bash
+git commit -a
+
 git push
 git push --tags
+```
 
-- To release a new version of jupyter_video_widget on NPM:
+## To release a new version of jupyter_video_widget on NPM:
 
-# nuke the  `dist` and `node_modules`
+Update version number in `js/src/package.json`. Clean working folders and publish:
+
+```bash
 git clean -fdx
 npm install
 npm publish
+```
