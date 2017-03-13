@@ -236,10 +236,9 @@ class Struct(dict):
 
     def __dir__(self):
         """
-        Return a list of object attributes.
-        This includes key names of any dict entries, filtered to the subset of
-        valid attribute names (e.g. alphanumeric strings beginning with a letter
-        or underscore).  Also includes attributes of parent dict class.
+        Return a list of object attributes, including key names of any dict entries,
+        filtered to the subset of valid attribute names (e.g. alphanumeric strings
+        beginning with a letter or underscore).  Does not include attributes of parent dict class.
         """
         dict_keys = []
         for k in self.keys():
@@ -248,17 +247,7 @@ class Struct(dict):
                 if m:
                     dict_keys.append(m.string)
 
-        obj_attrs = list(dir(Dict))
-
-        return dict_keys + obj_attrs
-
-    def _ipython_display_(self):
-        print(str(self))
-
-    def _repr_html_(self):
-        return str(self)
-
-
+        return dict_keys
 
     def dict(self):
         return self
@@ -421,7 +410,7 @@ class Struct(dict):
             else:
                 self[key] = conflict_solve[key](self[key],data_dict[key])
 
-#
+#------------------------------------------------
 
 if __name__ == '__main__':
     pass

@@ -1,5 +1,10 @@
+
+import time
+
 import ipywidgets as widgets
 import traitlets
+
+from . import struct
 
 @widgets.register()
 class Video(widgets.DOMWidget):
@@ -18,10 +23,10 @@ class Video(widgets.DOMWidget):
     _method = traitlets.List().tag(sync=True)
     _property = traitlets.List().tag(sync=True)
     _event = traitlets.Dict().tag(sync=True)
-    # _handlers_active = traitlets.Bool(False).tag(sync=True)
+    _playPause = traitlets.Bool(False).tag(sync=True)
 
     # Public information
-    src = traitlets.Unicode().tag(sync=True)
+    src = traitlets.Unicode('').tag(sync=True)
     currentTime = traitlets.Float().tag(sync=True)
 
     def __init__(self, src=''):
@@ -32,37 +37,49 @@ class Video(widgets.DOMWidget):
 
         self.src = src
 
-        # Allow user-defined Python callback functions for any of these event types
-        # kinds = ['durationchange', 'ended', 'loadedmetadata', 'pause', 'play', 'playing',
-        #          'ratechange', 'seeked', 'volumechange']
-        # self._event_dispatchers = {}
-        # for k in kinds:
-        #     self._event_dispatchers[k] = widgets.widget.CallbackDispatcher()
-
-        # Manage user-defined Python event callback functions
+        # Manage user-defined Python callback functions for frontend events
         self._event_dispatcher = widgets.widget.CallbackDispatcher()
-
-        self._state = {}
 
     @property
     def state(self):
         """
-        Video widget state information
+        Video widget current property values (read only).
         """
-        return self._state
+        return self._event.copy()
 
     def invoke_method(self, name, *args):
         """
-        Invoke front-end method
+        Invoke arbitrary front-end method
         """
-        self._method = [name, args]
+        stamp = time.time()  # timestamp required to ensure unqique event
+        self._method = [name, stamp, args]
 
     def set_property(self, name, value):
         """
-        Assign value to front-end property
+        Assign value to arbitrary front-end property
         """
-        self._property = [name, value]
+        stamp = time.time()  # timestamp required to ensure unqique event
+        self._property = [name, stamp, value]
 
+    #--------------------------------------------
+    # Video methods
+    def playPause(self):
+        self._playPause = not self._playPause
+
+    def play(self):
+        self.invoke_method('play')
+
+    def pause(self):
+        self.invoke_method('pause')
+
+    def rewind(self):
+        self.set_property('currentTime', 0)
+
+    def seek(self, time):
+        self.set_property('currentTime', time)
+
+    #--------------------------------------------
+    # Event handler stuff
     @traitlets.observe('_event')
     def _handle_event(self, change):
         """
@@ -73,24 +90,11 @@ class Video(widgets.DOMWidget):
         assert(change['name'] == '_event')
         event = change['new']
 
-        # Update self state information
-        self._state = event
-
         # Call any registered event handlers
         self._event_dispatcher(self, event)
-        # try:
-        #     # Do it
-        #     kind = event['type']
-        #     self._event_dispatchers[kind](self, event)
-        # except KeyError:
-        #     raise ValueError('Unexpected kind of event: {}'.format(kind))
 
     #--------------------------------------------
     # Register Python event handlers
-    # def _num_handlers(self):
-    #     numbers = [len(d.callbacks) for d in self._event_dispatchers.values()]
-    #     return sum(numbers)
-
     def on_event(self, callback, remove=False):
         """
         Register frontend-event callback function.
@@ -112,22 +116,13 @@ class Video(widgets.DOMWidget):
         #         raise ValueError('Unexpected kind of callback: {}'.format(k))
         #     # Register/un-register
         #     self._event_dispatchers[k].register_callback(callback, remove=remove)
+
         # Enable/disable event handling at front end.
         # self._handlers_active = self._num_handlers() > 0
 
-    #--------------------------------------------
-    # Video methods
-    def play(self):
-        self.invoke_method('play')
-
-    def pause(self):
-        self.invoke_method('pause')
-
-    def rewind(self):
-        self.set_property('currentTime', 0)
-
-    def seek(self, time):
-        self.set_property('currentTime', time)
+    # def _num_handlers(self):
+    #     numbers = [len(d.callbacks) for d in self._event_dispatchers.values()]
+    #     return sum(numbers)
 
 #------------------------------------------------
 if __name__ == '__main__':
