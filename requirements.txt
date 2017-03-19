@@ -1,4 +1,5 @@
-jupyter
 ipython
-notebook
 ipywidgets
+jupyter
+notebook
+numpy
