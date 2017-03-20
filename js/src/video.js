@@ -81,7 +81,7 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.setElement(this.video);
 
         this.video.controls = true;
-        this.video.preload = 'auto';
+        this.video.preload = 'metadata';
         this.video.autoplay = false;
         // this.video.tabindex = 1;
 

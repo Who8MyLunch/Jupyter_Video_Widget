@@ -4,7 +4,7 @@ import time
 import ipywidgets as widgets
 import traitlets
 
-from . import struct
+from . import namespace
 
 @widgets.register()
 class Video(widgets.DOMWidget):
@@ -36,7 +36,7 @@ class Video(widgets.DOMWidget):
         super().__init__()
 
         self.src = src
-        self._properties = struct.Struct()
+        self._properties = namespace.Struct()
 
         # Manage user-defined Python callback functions for frontend events
         self._event_dispatchers = {}  # widgets.widget.CallbackDispatcher()
