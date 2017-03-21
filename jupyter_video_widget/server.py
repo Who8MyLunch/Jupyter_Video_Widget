@@ -26,6 +26,7 @@ import socket
 import socketserver
 import sys
 import threading
+import time
 import urllib.parse
 
 
@@ -101,13 +102,18 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
         """
         Serve a GET request
         """
+        if self.verbose:
+            print(self.headers)
+
         path_work = self.translate_path(self.path)
         self.file_size = None
 
         if os.path.isfile(path_work):
             fp = self.send_file_head()
-        else:
+        elif  os.path.isdir(path_work):
             fp = self.send_directory_head()
+        else:
+            return
 
         if fp:
             try:
@@ -124,6 +130,9 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         # List directory contents into string buffer
         buffer = self.list_directory(path_work)
+
+        if not buffer:
+            return
 
         # Store file size
         buffer.seek(0, os.SEEK_END)
@@ -208,7 +217,6 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
             fp.close()
             raise
 
-
     def copy_chunks(self, src, dst):
         """
         Copy data from source file to destination file in little chunks.
@@ -268,9 +276,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         return path_work
 
-
 #------------------------------------------------
-
 
 
 def normalize_url(url):
@@ -282,51 +288,77 @@ def normalize_url(url):
 
     return nice_url
 
-
 class Server():
     """
     Handy wrapper for my http file server.
     """
-    def __init__(path_serve=None, port=None):
+    def __init__(self, path_serve='.', verbose=False):
         """
         Make a new server instance
         """
         if not path_serve:
-            path_serve = os.path.abspath(os.path.curdir)
+            path_serve = os.path.curdir
 
-        if not port:
-            port = 9876
-
+        self.verbose = verbose
         self._path_serve = path_serve
-        self._port = port
+        self._host = 'localhost'
+        self._port = 0  # 0 means system will pick a port number at random from those available
+        self._httpd = None
+        self._thread = None
 
     def __repr__(self):
         return self.status()
 
     @property
     def path_serve(self):
-        """
-        Local folder that maps to root url.
-        """
         return self._path_serve
+
+    @property
+    def host(self):
+        return self._host
 
     @property
     def port(self):
         return self._port
 
+
+    def start(self):
+        """
+        Start server running in background thread.
+        """
+        address = self.host, self.port
+        RequestHandler = RangeRequestHandler
+        RequestHandler.verbose = self.verbose
+        self._httpd = PathHTTPServer(self.path_serve, address, RequestHandler)
+
+        # Update self with actual hostname and port number
+        self._host, self._port = self._httpd.socket.getsockname()
+
+        self._thread = threading.Thread(target=self._httpd.serve_forever)
+        self._thread.start()
+
+    def stop(self):
+        self._httpd.shutdown()
+        self._thread.join()
+        self._host = 'localhost'
+        self._port = 0
+
     @property
     def is_running(self):
-        pass
+        return self._thread.is_alive()
 
     def status(self):
-        pass
+        if self.is_running:
+            return 'Serving {} on {}'.format(self.path_serve, self.url)
+        else:
+            return 'Server not running'
 
     @property
-    def url_root(self):
+    def url(self):
         """
         Complete url to root address
         """
-        url = 'http://127.0.0.1:{:d}'.format(self.port)
+        url = 'http://{:s}:{:d}'.format(self.host, self.port)
         return normalize_url(url)
 
     def filename_to_url(self, fname):
@@ -340,47 +372,30 @@ class Server():
 
         return url
 
-    def start(self):
-        pass
-
-    def stop(self):
-        pass
-
-
-
 
 #------------------------------------------------
 
 
-def main(path_base='.', port=9998, bind='localhost'):
+def main(path_serve='.'):
     """
-    https://docs.python.org/3/library/http.server.html
-    https://docs.python.org/3/library/socketserver.html#server-objects
-    https://docs.python.org/3.5/library/socketserver.html#socketserver.TCPServer
     """
-    path_base = os.path.normpath(os.path.abspath(path_base))
+    S = Server(path_serve)
+    S.start()
 
-    server_address = bind, port
-
-    ServerClass = PathHTTPServer
-    HandlerClass = RangeRequestHandler
-
-    httpd = ServerClass(path_base, server_address, HandlerClass)
-
-    sa = httpd.socket.getsockname()
-    tpl = "Serving HTTP on {host} port {port} (http://{host}:{port}/) ..."
-    print(tpl.format(host=sa[0], port=sa[1]))
+    print(S.status())
 
     try:
-        httpd.serve_forever()
+        while S.is_running:
+            time.sleep(0.1)
+
     except KeyboardInterrupt:
-        print('\nKeyboard interrupt received, exiting.')
+        print('\nKeyboard interrupt...')
+        S.stop()
 
     print('Done')
 
-
-###########################################
+#------------------------------------------------
 
 if __name__ == '__main__':
 
-    main(path_base='/home/pierre/Videos/GoPro/Malibu/')
+    main(path_serve='/home/pierre/Videos/GoPro/Malibu/')
