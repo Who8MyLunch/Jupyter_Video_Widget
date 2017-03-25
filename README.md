@@ -24,7 +24,8 @@ jupyter nbextension enable --py --sys-prefix widgetsnbextension
 Use pip to install:
 
 ```bash
-pip install jupyter_video_widget
+pip install Jupyter_Video_Widget
+
 jupyter nbextension enable --py --sys-prefix jupyter_video_widget
 ```
 
@@ -33,8 +34,10 @@ jupyter nbextension enable --py --sys-prefix jupyter_video_widget
 Development installation requires npm.
 
 ```bash
-git clone https://github.com/who8mylunch/jupyter_video_widget.git
-cd jupyter_video_widget
+git clone git@github.com:Who8MyLunch/Jupyter_Video_Widget.git
+
+cd Jupyter_Video_Widget
+
 pip install -e .
 jupyter nbextension install --py --symlink --sys-prefix jupyter_video_widget
 jupyter nbextension enable  --py           --sys-prefix jupyter_video_widget
