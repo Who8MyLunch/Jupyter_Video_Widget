@@ -2,4 +2,3 @@ ipython
 ipywidgets
 jupyter
 notebook
-numpy
