@@ -29,11 +29,13 @@ import threading
 import time
 import urllib.parse
 
+__all__ = ['Server']
+
+#------------------------------------------------
 
 BYTE_RANGE_RE = re.compile(r'bytes=(\d+)-(\d+)?$')
 def parse_byte_range(byte_range):
-    """
-    Returns the two numbers in 'bytes=123-456' or throws ValueError.
+    """Returns the two numbers in 'bytes=123-456' or throws ValueError.
 
     The last number or both numbers may be None.
     """
@@ -55,8 +57,7 @@ def parse_byte_range(byte_range):
 
 # class PathHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 class PathHTTPServer(http.server.HTTPServer):
-    """
-    http://louistiao.me/posts/python-simplehttpserver-recipe-serve-specific-directory/
+    """http://louistiao.me/posts/python-simplehttpserver-recipe-serve-specific-directory/
     """
     def __init__(self, path_base, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -68,8 +69,7 @@ class PathHTTPServer(http.server.HTTPServer):
 
 
 class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
-    """
-    Adds support for HTTP 'Range' requests to SimpleHTTPRequestHandler
+    """Adds support for HTTP 'Range' requests to SimpleHTTPRequestHandler
 
     The approach is to:
     - Override send_head to look for 'Range' and respond appropriately.
@@ -99,8 +99,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
             super().log_message(*args, **kwargs)
 
     def do_GET(self):
-        """
-        Serve a GET request
+        """Serve a GET request
         """
         if self.verbose:
             print(self.headers)
@@ -122,8 +121,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
                 fp.close()
 
     def send_directory_head(self):
-        """
-        Parse contents of directory and generate a respones.
+        """Parse contents of directory and generate a respones.
         """
         path_work = self.translate_path(self.path)
         parts = urllib.parse.urlsplit(self.path)
@@ -146,8 +144,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
         return path_work
 
     def send_file_head(self, path_work=None):
-        """
-        Derived from SimpleHTTPServer.py with added support for byte-range requests.
+        """Derived from SimpleHTTPServer.py with added support for byte-range requests.
         """
         # Handle ranges
         if 'Range' in self.headers:
@@ -182,7 +179,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         if first >= self.file_size:
             # https://tools.ietf.org/html/rfc7233
-            self.send_error(416, 'Requested Range Not Satisfiable')
+            self.send_error(416, 'Requested byte range not satisfiable')
             return None
 
         if last is None:
@@ -218,8 +215,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
             raise
 
     def copy_chunks(self, src, dst):
-        """
-        Copy data from source file to destination file in little chunks.
+        """Copy data from source file to destination file in little chunks.
         """
         buffer_size = 256*1024
 
@@ -257,9 +253,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
         return bytes_copied
 
     def translate_path(self, path):
-        """
-        Derived from:
-        http://louistiao.me/posts/python-simplehttpserver-recipe-serve-specific-directory/
+        """http://louistiao.me/posts/python-simplehttpserver-recipe-serve-specific-directory/
         """
         path = os.path.normpath(urllib.parse.unquote(path))
         words = path.split('/')
@@ -278,53 +272,55 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 #------------------------------------------------
 
-
-def normalize_url(url):
-    """
-    https://docs.python.org/3.0/library/urllib.parse.html#urllib.parse.ParseResult.geturl
-    """
-    parts = urllib.parse.urlsplit(url)
-    nice_url = parts.geturl()
-
-    return nice_url
-
 class Server():
-    """
-    Handy wrapper for my http file server.
+    """Handy wrapper for my http file server.
     """
     def __init__(self, path_serve='.', verbose=False):
-        """
-        Make a new server instance
+        """Make a new server instance
         """
         if not path_serve:
             path_serve = os.path.curdir
 
         self.verbose = verbose
-        self._path_serve = path_serve
+        self._path_serve = os.path.normpath(os.path.abspath(path_serve))
         self._host = 'localhost'
         self._port = 0  # 0 means system will pick a port number at random from those available
         self._httpd = None
         self._thread = None
+
+    def __del__(self):
+        self.stop()
 
     def __repr__(self):
         return self.status()
 
     @property
     def path_serve(self):
+        """Local path from which files are served.
+        """
         return self._path_serve
 
     @property
     def host(self):
+        """Server host name
+        """
         return self._host
 
     @property
     def port(self):
+        """Server address port number
+        """
         return self._port
 
+    @property
+    def url(self):
+        """URL for the HTTP address representing local folder server by this application
+        """
+        url = 'http://{:s}:{:d}'.format(self.host, self.port)
+        return normalize_url(url)
 
     def start(self):
-        """
-        Start server running in background thread.
+        """Start server running in background thread.
         """
         address = self.host, self.port
         RequestHandler = RangeRequestHandler
@@ -335,35 +331,33 @@ class Server():
         self._host, self._port = self._httpd.socket.getsockname()
 
         self._thread = threading.Thread(target=self._httpd.serve_forever)
+        self._thread.setDaemon(True)  # so background thread is killed automaticalled when main app thread exits.
         self._thread.start()
 
     def stop(self):
+        """Stop the server application
+        """
         self._httpd.shutdown()
         self._thread.join()
         self._host = 'localhost'
         self._port = 0
 
     @property
-    def is_running(self):
+    def running(self):
+        """Return True is application is running in its background thread
+        """
         return self._thread.is_alive()
 
     def status(self):
-        if self.is_running:
+        """Return pretty status string
+        """
+        if self.running:
             return 'Serving {} on {}'.format(self.path_serve, self.url)
         else:
             return 'Server not running'
 
-    @property
-    def url(self):
-        """
-        Complete url to root address
-        """
-        url = 'http://{:s}:{:d}'.format(self.host, self.port)
-        return normalize_url(url)
-
     def filename_to_url(self, fname):
-        """
-        Convert local filename to url handled by this server.
+        """Convert local filename to url handled by this server.
         """
         fname = os.path.abspath(os.path.normpath(fname))
 
@@ -373,19 +367,28 @@ class Server():
         return url
 
 
+
+def normalize_url(url):
+    """https://docs.python.org/3.0/library/urllib.parse.html#urllib.parse.ParseResult.geturl
+    """
+    parts = urllib.parse.urlsplit(url)
+    nice_url = parts.geturl()
+
+    return nice_url
+
 #------------------------------------------------
 
 
-def main(path_serve='.'):
+def main(path_serve):
+    """ A simple example for testing and development
     """
-    """
-    S = Server(path_serve)
+    S = Server(path_serve, verbose=False)
     S.start()
 
     print(S.status())
 
     try:
-        while S.is_running:
+        while S.running:
             time.sleep(0.1)
 
     except KeyboardInterrupt:
@@ -398,4 +401,6 @@ def main(path_serve='.'):
 
 if __name__ == '__main__':
 
-    main(path_serve='/home/pierre/Videos/GoPro/Malibu/')
+    # A simple example for testing and development
+    path = '/home/pierre/Videos'
+    main(path_serve=path)

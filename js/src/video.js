@@ -40,14 +40,6 @@ var VideoModel = widgets.DOMWidgetModel.extend({
         _view_name: 'VideoView',
         _model_module: 'jupyter_video_widget',
         _view_module: 'jupyter_video_widget',
-        // _model_module_version : '0.1.0',
-        // _view_module_version : '0.1.0',
-        // src: '',
-        // currentTime: 0.0,
-        // playPause: false,
-        // _method: [],
-        // _property: [],
-        // _event: {},
     })
 });
 
@@ -83,7 +75,6 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.video.controls = true;
         this.video.preload = 'metadata';
         this.video.autoplay = false;
-        // this.video.tabindex = 1;
 
         this.src_changed();
 

@@ -80,7 +80,6 @@ and over on the Python side.
 # Ideas for the Future
 
 - file selection compound widget: https://gist.github.com/DrDub/6efba6e522302e43d055
-
-
-
+- http://mindtrove.info/4-ways-to-extend-jupyter-notebook/#nb-server-exts
+- http://jupyter-notebook.readthedocs.io/en/latest/extending/handlers.html
 

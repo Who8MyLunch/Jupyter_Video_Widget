@@ -6,6 +6,10 @@ import traitlets
 
 from . import namespace
 
+from ._version import __version__
+
+__all__ = ['Video']
+
 @widgets.register()
 class Video(widgets.DOMWidget):
     """
@@ -13,11 +17,11 @@ class Video(widgets.DOMWidget):
     """
     _view_name =   traitlets.Unicode('VideoView').tag(sync=True)
     _view_module = traitlets.Unicode('jupyter_video_widget').tag(sync=True)
-    _view_module_version = traitlets.Unicode('0.1.0').tag(sync=True)
+    _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     _model_name =   traitlets.Unicode('VideoModel').tag(sync=True)
     _model_module = traitlets.Unicode('jupyter_video_widget').tag(sync=True)
-    _model_module_version = traitlets.Unicode('0.1.0').tag(sync=True)
+    _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     # Private information
     _method = traitlets.List().tag(sync=True)
@@ -175,17 +179,6 @@ class Video(widgets.DOMWidget):
 
         for cb in callbacks:
             self.on_event(cb, remove=True)
-
-
-
-# class FancyVideo(Video)::
-#     def __init__(self, src=''):
-#         """
-#         Create new widget instance
-#         """
-#         super().__init__(src)
-
-
 
 
 #------------------------------------------------
