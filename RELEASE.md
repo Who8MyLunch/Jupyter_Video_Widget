@@ -1,6 +1,6 @@
 # Release
 
-## To release a new version of jupyter_video_widget on PyPI:
+## To release a new version of Jupyter_Video_Widget on PyPI:
 
 Update _version.py (set release version, remove 'dev') and then:
 

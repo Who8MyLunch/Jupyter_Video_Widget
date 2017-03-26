@@ -2,3 +2,4 @@ ipython
 ipywidgets
 jupyter
 notebook
+traitlets
