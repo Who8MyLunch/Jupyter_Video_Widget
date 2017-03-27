@@ -87,7 +87,8 @@ var VideoView = widgets.DOMWidgetView.extend({
         //-------------------------------------------------
         // Video element event handlers, with throttling in miliseconds
         // frontend --> backend
-        var throttled_handle_event = throttle(this.handle_event, 100, this);
+        var dt = 500;  // miliseconds
+        var throttled_handle_event = throttle(this.handle_event, dt, this);
         this.video.addEventListener('durationchange', throttled_handle_event);
         this.video.addEventListener('ended',          throttled_handle_event);
         this.video.addEventListener('loadedmetadata', throttled_handle_event);
@@ -98,20 +99,22 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.video.addEventListener('seeked',         throttled_handle_event);
         this.video.addEventListener('seeking',        throttled_handle_event);
         this.video.addEventListener('volumechange',   throttled_handle_event);
+        this.video.addEventListener('timeupdate',     throttled_handle_event);
 
-        var throttled_handle_currentTime = throttle(this.handle_currentTime, 100, this);
-        this.video.addEventListener('currentTime', throttled_handle_currentTime);
+        // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
+        var throttled_handle_currentTime = throttle(this.handle_currentTime, dt, this);
+        this.video.addEventListener('timeupdate', throttled_handle_currentTime);
 
-        // Mouse event handlers
+        // Various mouse event handlers
         this.video.onwheel = function(ev) {
             // Prevent page from scrolling with mouse wheel when hovering over video
             ev.preventDefault();
         };
 
-        var throttled_mouse_wheel = throttle(this.handle_mouse_wheel, 100, this);
+        var throttled_mouse_wheel = throttle(this.handle_mouse_wheel, dt, this);
         this.video.addEventListener('wheel', throttled_mouse_wheel);
 
-        var throttled_mouse_click = throttle(this.handle_mouse_click, 100, this);
+        var throttled_mouse_click = throttle(this.handle_mouse_click, dt, this);
         this.video.addEventListener('click', throttled_mouse_click);
 
         // Keyboard events, enabled by setting tabindex attribute at start of this section
@@ -161,8 +164,10 @@ var VideoView = widgets.DOMWidgetView.extend({
 
     currentTime_changed: function() {
         // backend --> frontend
-        var field = 'currentTime';
-        this.video[field] = this.model.get(field);
+        if (this.video.paused) {
+            var field = 'currentTime';
+            this.video[field] = this.model.get(field);
+        }
     },
 
     playPause_changed: function() {
@@ -177,21 +182,22 @@ var VideoView = widgets.DOMWidgetView.extend({
     handle_event: function(ev) {
         // General video-element event handler
         // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
-        var fields = ['autoplay', 'clientHeight', 'clientWidth', 'controls', 'currentTime',
-                      'currentSrc', 'duration', 'ended', 'loop', 'muted', 'paused', 'playbackRate',
+        var fields = ['clientHeight', 'clientWidth', 'controls', 'currentTime', 'currentSrc',
+                      'duration', 'ended', 'muted', 'paused', 'playbackRate',
                       'readyState', 'seeking', 'videoHeight', 'videoWidth', 'volume']
 
         var pev = {'type': ev.type};
         for (let f of fields) {
             pev[f] = ev.target[f];
         }
-
         this.model.set('_event', pev)
+
         this.touch();  // Must call this after any frontend modifications to Model data.
     },
 
     handle_currentTime: function(ev) {
-        this.model.set('currentTime', ev.target.currentTime);
+        var field = 'currentTime';
+        this.model.set(field, ev.target[field]);
         this.touch();  // Must call this after any frontend modifications to Model data.
     },
 
@@ -225,12 +231,7 @@ var VideoView = widgets.DOMWidgetView.extend({
     },
 
     handle_mouse_click: function(ev) {
-        // a copy of playPause_changed event handler
-        if (this.video.paused) {
-            this.video.play()
-        } else {
-            this.video.pause()
-        }
+        this.playPause_changed();
     },
 
 });

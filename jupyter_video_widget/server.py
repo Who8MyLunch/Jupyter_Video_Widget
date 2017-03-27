@@ -255,7 +255,7 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
     def translate_path(self, path):
         """http://louistiao.me/posts/python-simplehttpserver-recipe-serve-specific-directory/
         """
-        path = os.path.normpath(urllib.parse.unquote(path))
+        path = os.path.realpath(urllib.parse.unquote(path))
         words = path.split('/')
         words = filter(None, words)
 
@@ -268,70 +268,90 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
 
             path_work = os.path.join(path_work, word)
 
-        return path_work
+        # Strip off any parameters
+        parts = path_work.split('?')
+        return parts[0]
 
 #------------------------------------------------
 
 class Server():
     """Handy wrapper for my http file server.
     """
-    def __init__(self, path_serve='.', verbose=False):
-        """Make a new server instance
+    def __init__(self, path='.', verbose=False):
+        """Make a new server instance, choosing a port at random from those available.
         """
-        if not path_serve:
-            path_serve = os.path.curdir
+        if not path:
+            path = os.path.curdir
 
+        self._path = None
         self.verbose = verbose
-        self._path_serve = os.path.normpath(os.path.abspath(path_serve))
-        self._host = 'localhost'
-        self._port = 0  # 0 means system will pick a port number at random from those available
-        self._httpd = None
-        self._thread = None
+        self._reset_properties()
+        self.path = path
 
     def __del__(self):
-        self.stop()
+        try:
+            self.stop()
+        except:
+            pass
 
     def __repr__(self):
         return self.status()
 
+    def _reset_properties(self):
+        self.host = None
+        self.port = None
+        self._httpd = None
+        self._thread = None
+
     @property
-    def path_serve(self):
+    def path(self):
         """Local path from which files are served.
         """
-        return self._path_serve
+        return self._path
 
-    @property
-    def host(self):
-        """Server host name
+    @path.setter
+    def path(self, path_new):
+        """Set new path for serving content.
+        If server is running then stop and restart with new path.
+        Port number will also change...
         """
-        return self._host
+        path_new = os.path.realpath(path_new)
 
-    @property
-    def port(self):
-        """Server address port number
-        """
-        return self._port
+        if not os.path.isdir(path_new):
+            raise ValueError('Path does not exist: {}'.format(path_new))
+
+        if self._path != path_new:
+            # Set new path for serving content
+            if self.running:
+                # Stop and restart with new path.  Port number will change...
+                self.stop()
+                self._path = path_new
+                self.start()
+            else:
+                # Just set it
+                self._path = path_new
 
     @property
     def url(self):
-        """URL for the HTTP address representing local folder server by this application
+        """HTTP address for the local folder server by this application
         """
-        url = 'http://{:s}:{:d}'.format(self.host, self.port)
-        return normalize_url(url)
+        return normalize_url('http://{:s}:{:d}'.format(self.host, self.port))
 
     def start(self):
         """Start server running in background thread.
         """
-        address = self.host, self.port
+        host = 'localhost'
+        port = 0   # 0 means system will pick a port number at random from those available
+        address = host, port
         RequestHandler = RangeRequestHandler
         RequestHandler.verbose = self.verbose
-        self._httpd = PathHTTPServer(self.path_serve, address, RequestHandler)
+        self._httpd = PathHTTPServer(self.path, address, RequestHandler)
 
         # Update self with actual hostname and port number
-        self._host, self._port = self._httpd.socket.getsockname()
+        self.host, self.port = self._httpd.socket.getsockname()
 
         self._thread = threading.Thread(target=self._httpd.serve_forever)
-        self._thread.setDaemon(True)  # so background thread is killed automaticalled when main app thread exits.
+        self._thread.setDaemon(True)  # background thread is killed automaticalled when main thread exits.
         self._thread.start()
 
     def stop(self):
@@ -339,44 +359,59 @@ class Server():
         """
         self._httpd.shutdown()
         self._thread.join()
-        self._host = 'localhost'
-        self._port = 0
+        self._reset_properties()
 
     @property
     def running(self):
-        """Return True is application is running in its background thread
+        """Return True if application is running in background thread
         """
-        return self._thread.is_alive()
+        if self._thread:
+            return self._thread.is_alive()
+        else:
+            return False
 
     def status(self):
         """Return pretty status string
         """
         if self.running:
-            return 'Serving {} on {}'.format(self.path_serve, self.url)
+            return 'Serving {} on {}'.format(self.path, self.url)
         else:
             return 'Server not running'
 
     def filename_to_url(self, fname):
         """Convert local filename to url handled by this server.
         """
-        fname = os.path.abspath(os.path.normpath(fname))
+        if not self.running:
+            raise ValueError('This function only works when server is running.')
 
-        a, b = fname.split(os.path.normpath(self.path_serve))
-        url = normalize_url(self.url_root + b)
+        fname = os.path.realpath(fname)
+
+        a, b = fname.split(self.path)
+        url = normalize_url(self.url + '/' + b)
 
         return url
 
+#------------------------------------------------
+# Helper functions
 
+def is_subfolder(path, path_sub):
+    """Return True if path_sub is a subfolder of path
+    """
+    path = os.path.realpath(path)
+    path_sub = os.path.realpath(path_sub)
+
+    return path_sub.startswith(path)
 
 def normalize_url(url):
-    """https://docs.python.org/3.0/library/urllib.parse.html#urllib.parse.ParseResult.geturl
+    """Simpler helper function to ensure my URLs are well behaved.
+    https://docs.python.org/3.0/library/urllib.parse.html#urllib.parse.ParseResult.geturl
     """
     parts = urllib.parse.urlsplit(url)
     nice_url = parts.geturl()
 
     return nice_url
 
-#------------------------------------------------
+#################################################
 
 
 def main(path_serve):
@@ -392,7 +427,7 @@ def main(path_serve):
             time.sleep(0.1)
 
     except KeyboardInterrupt:
-        print('\nKeyboard interrupt...')
+        print('\nKeyboard interrupt!')
         S.stop()
 
     print('Done')

@@ -2,4 +2,5 @@ ipython
 ipywidgets
 jupyter
 notebook
+shortuuid
 traitlets
