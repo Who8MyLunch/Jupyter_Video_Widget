@@ -7,7 +7,7 @@ import traitlets
 import shortuuid
 
 from ._version import __version__
-from . import namespace
+from .namespace import Struct
 from . import server
 
 __all__ = ['Video']
@@ -39,7 +39,7 @@ class Video(widgets.DOMWidget):
         """
         super().__init__()
 
-        self.properties = namespace.Struct()
+        self.properties = Struct()
         self.server = None
         self.filename = None
 
@@ -51,7 +51,7 @@ class Video(widgets.DOMWidget):
             # This makes for smooth-as-butter seeking, fast-forward, etc.
             self.filename = filename
         elif src:
-            # just pass along src as supplied
+            # set src traitlet directly
             self.src = src
 
     def __del__(self):
@@ -65,21 +65,22 @@ class Video(widgets.DOMWidget):
         return self._filename
 
     @filename.setter
-    def filename(self, fname_video):
-        if not fname_video:
-            # Set filename to None and shutdown any running server
+    def filename(self, fname):
+        if not fname:
+            # Supplied filename is None, '', or similar.
+            # Set filename to None and shutdown server if running
             self._filename = ''
             if self.server:
                 self.server.stop()
             return
-        elif not os.path.isfile(fname_video):
-            raise ValueError('File does not exist: {}'.format(fname_video))
+        elif not os.path.isfile(fname):
+            raise ValueError('File does not exist: {}'.format(fname))
 
-        # Configure internal http server for local file.
-        self._filename = os.path.realpath(fname_video)
-        path_served = os.path.dirname(self._filename)
+        # Configure internal http server for local file
+        self._filename = os.path.realpath(fname)
 
         # Start server if not already running, update path
+        path_served = os.path.dirname(self._filename)
         if not self.server:
             self.server = server.Server(path=path_served)
             self.server.start()
@@ -89,42 +90,25 @@ class Video(widgets.DOMWidget):
         # Random version string to avoid browser cacheing issues
         version = '?v={}'.format(shortuuid.uuid())
 
-        # Set proper URL to local file through http server
+        # Set local file URL via internal http server
         self.src = self.server.filename_to_url(self._filename+version)
-
-    @property
-    def ready_state(self):
-        """
-        Note: I'll probably eliminate this property in the near future...
-
-        Integer indicating the readiness state of the media:
-        HAVE_NOTHING        0   No information is available about the media resource.
-        HAVE_METADATA       1   Enough of the media resource has been retrieved that the metadata
-                                attributes are initialized. Seeking will no longer raise an exception.
-        HAVE_CURRENT_DATA   2   Data is available for the current playback position, but not
-                                enough to actually play more than one frame.
-        HAVE_FUTURE_DATA    3   Data for the current playback position as well as for at least a
-                                little bit of time into the future is available.
-        HAVE_ENOUGH_DATA    4   Enough data is available—and the download rate is high enough—that
-                                the media can be played through to the end without interruption.
-        https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
-        """
-        return self.properties.readyState
 
     def invoke_method(self, name, *args):
         """Invoke method on front-end HTML5 video element
+        https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
         """
         stamp = time.time()  # timestamp required to ensure unqique event
         self._method = [name, stamp, args]
 
     def set_property(self, name, value):
         """Assign value to front-end HTML5 video element property
+        https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
         """
         stamp = time.time()  # timestamp required to ensure unqique event
         self._property = [name, stamp, value]
 
     #--------------------------------------------
-    # Video activity methods
+    # Video activity control methods
     def play_pause(self):
         self._play_pause = not self._play_pause
 
@@ -163,7 +147,7 @@ class Video(widgets.DOMWidget):
     #--------------------------------------------
     # Register Python event handlers
     def on_event(self, event_type, callback, remove=False):
-        """Register frontend-event callback function.
+        """Register Python callback functions.
 
         May be called repeatedly to set multiple callback functions.
 
@@ -196,6 +180,7 @@ class Video(widgets.DOMWidget):
         self.on_event('play', callback)
 
     def on_ready(callback):
+        # https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
         self.on_event('loadedmetadata', callback)
 
     def unregister(self):

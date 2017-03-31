@@ -87,7 +87,7 @@ var VideoView = widgets.DOMWidgetView.extend({
         //-------------------------------------------------
         // Video element event handlers, with throttling in miliseconds
         // frontend --> backend
-        var dt = 500;  // miliseconds
+        var dt = 50;  // miliseconds
         var throttled_handle_event = throttle(this.handle_event, dt, this);
         this.video.addEventListener('durationchange', throttled_handle_event);
         this.video.addEventListener('ended',          throttled_handle_event);
@@ -101,9 +101,9 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.video.addEventListener('volumechange',   throttled_handle_event);
         this.video.addEventListener('timeupdate',     throttled_handle_event);
 
-        // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
-        var throttled_handle_currentTime = throttle(this.handle_currentTime, dt, this);
-        this.video.addEventListener('timeupdate', throttled_handle_currentTime);
+        // // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
+        // var throttled_handle_currentTime = throttle(this.handle_currentTime, dt, this);
+        // this.video.addEventListener('timeupdate', throttled_handle_currentTime);
 
         // Various mouse event handlers
         this.video.onwheel = function(ev) {
@@ -165,6 +165,7 @@ var VideoView = widgets.DOMWidgetView.extend({
     currentTime_changed: function() {
         // backend --> frontend
         if (this.video.paused) {
+            // Only respond if not currently playing.
             var field = 'currentTime';
             this.video[field] = this.model.get(field);
         }
@@ -192,14 +193,18 @@ var VideoView = widgets.DOMWidgetView.extend({
         }
         this.model.set('_event', pev)
 
+        // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
+        var field = 'currentTime';
+        this.model.set(field, ev.target[field]);
+
         this.touch();  // Must call this after any frontend modifications to Model data.
     },
 
-    handle_currentTime: function(ev) {
-        var field = 'currentTime';
-        this.model.set(field, ev.target[field]);
-        this.touch();  // Must call this after any frontend modifications to Model data.
-    },
+    // handle_currentTime: function(ev) {
+    //     var field = 'currentTime';
+    //     this.model.set(field, ev.target[field]);
+    //     this.touch();  // Must call this after any frontend modifications to Model data.
+    // },
 
     // handle_keypress: function(ev) {
     //     console.log(ev);
