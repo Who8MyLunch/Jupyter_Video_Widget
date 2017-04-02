@@ -18,11 +18,11 @@ class Video(widgets.DOMWidget):
     """HTML5 video player as a Jupyter widget
     """
     _view_name =   traitlets.Unicode('VideoView').tag(sync=True)
-    _view_module = traitlets.Unicode('jupyter_video_widget').tag(sync=True)
+    _view_module = traitlets.Unicode('video_widget').tag(sync=True)
     _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     _model_name =   traitlets.Unicode('VideoModel').tag(sync=True)
-    _model_module = traitlets.Unicode('jupyter_video_widget').tag(sync=True)
+    _model_module = traitlets.Unicode('video_widget').tag(sync=True)
     _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     # Private information

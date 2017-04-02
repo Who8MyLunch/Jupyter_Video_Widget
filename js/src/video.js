@@ -38,8 +38,8 @@ var VideoModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
         _model_name: 'VideoModel',
         _view_name: 'VideoView',
-        _model_module: 'jupyter_video_widget',
-        _view_module: 'jupyter_video_widget',
+        _model_module: 'video_widget',
+        _view_module: 'video_widget',
     })
 });
 
