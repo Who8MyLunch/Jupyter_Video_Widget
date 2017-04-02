@@ -2,6 +2,7 @@
 import time
 import os
 
+import IPython
 import ipywidgets as widgets
 import traitlets
 import shortuuid
@@ -32,9 +33,9 @@ class Video(widgets.DOMWidget):
 
     # Public information
     src = traitlets.Unicode('').tag(sync=True)
-    currentTime = traitlets.Float().tag(sync=True)
+    current_time = traitlets.Float().tag(sync=True)
 
-    def __init__(self, src='', filename=''):
+    def __init__(self, source):
         """Create new widget instance
         """
         super().__init__()
@@ -46,17 +47,25 @@ class Video(widgets.DOMWidget):
         # Manage user-defined Python callback functions for frontend events
         self._event_dispatchers = {}  # widgets.widget.CallbackDispatcher()
 
-        if filename:
+        if os.path.isfile(source):
             # Setting filename starts an internal http server with support for byte-range requests
             # This makes for smooth-as-butter seeking, fast-forward, etc.
-            self.filename = filename
+            self.filename = source
         elif src:
             # set src traitlet directly
-            self.src = src
+            self.src = source
+
+        # Style
+        self.layout.width = '100%'  # scale to fit inside parent contanier
+        self.layout.align_self = 'center'
+        self.layout.border = '1px solid'
 
     def __del__(self):
         if self.server:
             self.server.stop()
+
+    def display(self):
+        IPython.display.display(self)
 
     @property
     def filename(self):
@@ -110,21 +119,31 @@ class Video(widgets.DOMWidget):
     #--------------------------------------------
     # Video activity control methods
     def play_pause(self):
+        """Toggle video playback
+        """
         self._play_pause = not self._play_pause
 
     def play(self):
+        """Begin video playback
+        """
         self.invoke_method('play')
 
     def pause(self):
+        """Pause video playback
+        """
         self.invoke_method('pause')
 
     def rewind(self):
+        """Pause video, then seek to beginning
+        """
         self.pause()
-        self.currentTime = 0
+        self.current_time = 0
 
     def seek(self, time):
+        """Seek to a specific time
+        """
         self.pause()
-        self.currentTime = time
+        self.current_time = time
 
     #--------------------------------------------
     # Event handler stuff
@@ -147,7 +166,7 @@ class Video(widgets.DOMWidget):
     #--------------------------------------------
     # Register Python event handlers
     def on_event(self, event_type, callback, remove=False):
-        """Register Python callback functions.
+        """(un)Register a Python event=-handler functions.
 
         May be called repeatedly to set multiple callback functions.
 
@@ -162,24 +181,34 @@ class Video(widgets.DOMWidget):
             - seeked
             - seeking
             - volumechange
+            - timeupdate
 
         Set keyword remove=True to unregister an existing callback function.
+
         Supplied callback function(s) must accept two arguments: widget instance and event dict.
         Note: no checking is done to verify that supplied event type is valid.
         """
         if event_type not in self._event_dispatchers:
             self._event_dispatchers[event_type] = widgets.widget.CallbackDispatcher()
 
-        # Register/un-register
         self._event_dispatchers[event_type].register_callback(callback, remove=remove)
 
     def on_pause(callback):
+        """Register Python event handler for 'pause' event.
+        Convenience wrapper around on_event().
+        """
         self.on_event('pause', callback)
 
     def on_play(callback):
+        """Register Python event handler for 'play' event.
+        Convenience wrapper around on_event().
+        """
         self.on_event('play', callback)
 
     def on_ready(callback):
+        """Register Python event handler for 'ready' event.
+        Convenience wrapper around on_event().
+        """
         # https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
         self.on_event('loadedmetadata', callback)
 

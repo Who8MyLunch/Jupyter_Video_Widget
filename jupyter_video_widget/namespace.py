@@ -5,6 +5,7 @@ Authors:
 
 * Fernando Perez (original)
 * Brian Granger (refactoring to a dict subclass)
+* Pierre Villeneuve (modified for use embedded within video player widget)
 """
 
 #-----------------------------------------------------------------------------
@@ -230,7 +231,7 @@ class Struct(dict):
         return outdict
 
 
-      # Regular expression pattern for valid Python attributes
+    # Regular expression pattern for valid Python attributes
     # https://docs.python.org/3/reference/lexical_analysis.html#identifiers
     _re_pattern = re.compile('[a-zA-Z_][a-zA-Z0-9_]*')
 
@@ -283,7 +284,7 @@ class Struct(dict):
         """
         return key in self
 
-    def allow_new_attr(self, allow = True):
+    def allow_new_attr(self, allow=True):
         """Set whether new attributes can be created in this Struct.
 
         This can be used to catch typos by verifying that the attribute user

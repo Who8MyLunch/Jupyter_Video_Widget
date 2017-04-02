@@ -82,12 +82,12 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.model.on('change:_property', this.set_property, this);
         this.model.on('change:_play_pause', this.playPause_changed, this);
         this.model.on('change:src', this.src_changed, this);
-        this.model.on('change:currentTime', this.currentTime_changed, this);
+        this.model.on('change:current_time', this.current_time_changed, this);
 
         //-------------------------------------------------
         // Video element event handlers, with throttling in miliseconds
         // frontend --> backend
-        var dt = 50;  // miliseconds
+        var dt = 10;  // miliseconds
         var throttled_handle_event = throttle(this.handle_event, dt, this);
         this.video.addEventListener('durationchange', throttled_handle_event);
         this.video.addEventListener('ended',          throttled_handle_event);
@@ -162,21 +162,22 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.video[field] = this.model.get(field);
     },
 
-    currentTime_changed: function() {
+    current_time_changed: function() {
         // backend --> frontend
         if (this.video.paused) {
             // Only respond if not currently playing.
-            var field = 'currentTime';
-            this.video[field] = this.model.get(field);
+            this.video['currentTime'] = this.model.get('current_time');
         }
     },
 
     playPause_changed: function() {
         // backend --> frontend
         if (this.video.paused) {
-            this.video.play()
+            this.model.set('_method', ['play', Date.now(), ''])
+            // this.video.play()
         } else {
-            this.video.pause()
+            this.model.set('_method', ['pause', Date.now(), ''])
+            // this.video.pause()
         }
     },
 
@@ -194,8 +195,7 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.model.set('_event', pev)
 
         // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
-        var field = 'currentTime';
-        this.model.set(field, ev.target[field]);
+        this.model.set('current_time', ev.target['currentTime']);
 
         this.touch();  // Must call this after any frontend modifications to Model data.
     },
