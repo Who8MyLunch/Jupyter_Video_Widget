@@ -25,7 +25,7 @@ Use pip to install:
 ```bash
 pip install Jupyter_Video_Widget
 
-jupyter nbextension enable --py --sys-prefix jupyter_video_widget
+jupyter nbextension enable --py --sys-prefix video_widget
 ```
 
 ## Developer Installation
@@ -38,8 +38,8 @@ git clone git@github.com:Who8MyLunch/Jupyter_Video_Widget.git
 cd Jupyter_Video_Widget
 
 pip install -e .
-jupyter nbextension install --py --symlink --sys-prefix jupyter_video_widget
-jupyter nbextension enable  --py           --sys-prefix jupyter_video_widget
+jupyter nbextension install --py --symlink --sys-prefix video_widget
+jupyter nbextension enable  --py           --sys-prefix video_widget
 ```
 
 # Developer Workflow
@@ -47,7 +47,7 @@ jupyter nbextension enable  --py           --sys-prefix jupyter_video_widget
 ## Which Files to Edit?
 
 - Jupyter_Video_Widget/
-    - jupyter_video_widget/     *All Python code lives here*
+    - video_widget/             *All Python code lives here*
         - static/
         - __init__.py
         - _version.py

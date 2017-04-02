@@ -51,7 +51,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	// Some static assets may be required by the custom widget javascript. The base
 	// url for the notebook is not known at build time and is therefore computed
 	// dynamically.
-	__webpack_require__.p = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyter_video_widget/';
+	__webpack_require__.p = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/video_widget/';
 	
 	// Export widget models and views, and the npm package version number.
 	module.exports = __webpack_require__(1);
@@ -102,8 +102,8 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
 	        _model_name: 'VideoModel',
 	        _view_name: 'VideoView',
-	        _model_module: 'jupyter_video_widget',
-	        _view_module: 'jupyter_video_widget',
+	        _model_module: 'video_widget',
+	        _view_module: 'video_widget',
 	    })
 	});
 	
@@ -1876,7 +1876,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 /***/ function(module, exports) {
 
 	module.exports = {
-		"name": "jupyter_video_widget",
+		"name": "video_widget",
 		"version": "0.1.0",
 		"description": "HMTL5 video player widget",
 		"author": "Pierre Villeneuve",
