@@ -56,9 +56,8 @@ class Video(widgets.DOMWidget):
             self.src = source
 
         # Style
-        self.layout.width = '100%'  # scale to fit inside parent contanier
+        self.layout.width = '100%'  # scale to fit inside parent element
         self.layout.align_self = 'center'
-        self.layout.border = '1px solid'
 
     def __del__(self):
         if self.server:
@@ -165,9 +164,9 @@ class Video(widgets.DOMWidget):
 
     #--------------------------------------------
     # Register Python event handlers
-    def on_event(self, event_type, callback, remove=False):
+    def on_event(self, event_type='', callback, remove=False):
         """(un)Register a Python event=-handler functions.
-
+        Default is to register for all event types.
         May be called repeatedly to set multiple callback functions.
 
         Non-exhaustive list of event types:
@@ -191,7 +190,13 @@ class Video(widgets.DOMWidget):
         if event_type not in self._event_dispatchers:
             self._event_dispatchers[event_type] = widgets.widget.CallbackDispatcher()
 
-        self._event_dispatchers[event_type].register_callback(callback, remove=remove)
+        if event_type:
+            # Register with specified dispatcher
+            self._event_dispatchers[event_type].register_callback(callback, remove=remove)
+        else:
+            # Register with all known dispatchers
+            for v in self._event_dispatchers.values():
+                v.register_callback(callback, remove=remove)
 
     def on_pause(callback):
         """Register Python event handler for 'pause' event.
