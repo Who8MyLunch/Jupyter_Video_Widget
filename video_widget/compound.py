@@ -11,23 +11,66 @@ from .video import Video
 __all__ = ['Player']
 
 """
-Compound video player widget
+Compound video player widget based on my own custom HTML5 video widget combined with various
+builtin Jupyter widgets.
+
+Available Jupyter widgets:
+    Jupyter.BoundedFloatText
+    Jupyter.BoundedIntText
+    Jupyter.Box
+    Jupyter.Button
+    Jupyter.ButtonStyle
+    Jupyter.Checkbox
+    Jupyter.ColorPicker
+    Jupyter.Controller
+    Jupyter.ControllerAxis
+    Jupyter.ControllerButton
+    Jupyter.DatePicker
+    Jupyter.Dropdown
+    Jupyter.FloatProgress
+    Jupyter.FloatRangeSlider
+    Jupyter.FloatSlider
+    Jupyter.FloatText
+    Jupyter.HBox
+    Jupyter.HTML
+    Jupyter.HTMLMath
+    Jupyter.Image
+    Jupyter.IntProgress
+    Jupyter.IntRangeSlider
+    Jupyter.IntSlider
+    Jupyter.IntText
+    Jupyter.Label
+    Jupyter.Play
+    Jupyter.ProgressStyle
+    Jupyter.RadioButtons
+    Jupyter.Select
+    Jupyter.SelectMultiple
+    Jupyter.SelectionSlider
+    Jupyter.SliderStyle
+    Jupyter.Tab
+    Jupyter.Text
+    Jupyter.Textarea
+    Jupyter.ToggleButton
+    Jupyter.ToggleButtons
+    Jupyter.VBox
+    Jupyter.Valid
+    jupyter.DirectionalLink
+    jupyter.Link
+    jupyter_video_widget.videoVide
 """
 
 # build various individual widgets:
 # - video
 # - slider
 # - nice time numbers, including N/30 as surrogate for frame number
-# - play, pause
+# - buttons: play, pause, fast play fast rev play, ??
 #
 
-class VideoPlayer():
-    """
-    Compound video player widget.
+class VideoPlayer(ipywidgets.VBox):
+    """Compound video player widget
     """
     def __init__(self, source):
-        """
-        Define a new player instance for supplied source
+        """Define a new player instance for supplied source
         """
         #$ Build the parts
         wid_video = Video(source)
@@ -75,48 +118,3 @@ class VideoPlayer():
 
 
 
-
-"""
- 'Jupyter.BoundedFloatText',
- 'Jupyter.BoundedIntText',
- 'Jupyter.Box',
- 'Jupyter.Button',
- 'Jupyter.ButtonStyle',
- 'Jupyter.Checkbox',
- 'Jupyter.ColorPicker',
- 'Jupyter.Controller',
- 'Jupyter.ControllerAxis',
- 'Jupyter.ControllerButton',
- 'Jupyter.DatePicker',
- 'Jupyter.Dropdown',
- 'Jupyter.FloatProgress',
- 'Jupyter.FloatRangeSlider',
- 'Jupyter.FloatSlider',
- 'Jupyter.FloatText',
- 'Jupyter.HBox',
- 'Jupyter.HTML',
- 'Jupyter.HTMLMath',
- 'Jupyter.Image',
- 'Jupyter.IntProgress',
- 'Jupyter.IntRangeSlider',
- 'Jupyter.IntSlider',
- 'Jupyter.IntText',
- 'Jupyter.Label',
- 'Jupyter.Play',
- 'Jupyter.ProgressStyle',
- 'Jupyter.RadioButtons',
- 'Jupyter.Select',
- 'Jupyter.SelectMultiple',
- 'Jupyter.SelectionSlider',
- 'Jupyter.SliderStyle',
- 'Jupyter.Tab',
- 'Jupyter.Text',
- 'Jupyter.Textarea',
- 'Jupyter.ToggleButton',
- 'Jupyter.ToggleButtons',
- 'Jupyter.VBox',
- 'Jupyter.Valid',
- 'jupyter.DirectionalLink',
- 'jupyter.Link',
- 'jupyter_video_widget.videoVideo'
-"""

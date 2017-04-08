@@ -35,7 +35,7 @@ class Video(widgets.DOMWidget):
     src = traitlets.Unicode('').tag(sync=True)
     current_time = traitlets.Float().tag(sync=True)
 
-    def __init__(self, source):
+    def __init__(self, source=None):
         """Create new widget instance
         """
         super().__init__()
@@ -47,13 +47,14 @@ class Video(widgets.DOMWidget):
         # Manage user-defined Python callback functions for frontend events
         self._event_dispatchers = {}  # widgets.widget.CallbackDispatcher()
 
-        if os.path.isfile(source):
-            # Setting filename starts an internal http server with support for byte-range requests
-            # This makes for smooth-as-butter seeking, fast-forward, etc.
-            self.filename = source
-        elif src:
-            # set src traitlet directly
-            self.src = source
+        if source:
+            if os.path.isfile(source):
+                # Setting filename starts an internal http server with support for byte-range requests
+                # This makes for smooth-as-butter seeking, fast-forward, etc.
+                self.filename = source
+            elif src:
+                # set src traitlet directly
+                self.src = source
 
         # Style
         self.layout.width = '100%'  # scale to fit inside parent element
@@ -158,13 +159,18 @@ class Video(widgets.DOMWidget):
         # Update internal copy of Video element properties
         self.properties.update(event)
 
-        # Call any registered event handlers
+        # Call any event-specific registered handlers
         if event['type'] in self._event_dispatchers:
-            self._event_dispatchers[event['type']](self, event)
+            self._event_dispatchers[event['type']](self, **event)
+
+        # Call any general event handlers
+        if '' in self._event_dispatchers:
+            self._event_dispatchers[''](self, **event)
 
     #--------------------------------------------
     # Register Python event handlers
-    def on_event(self, event_type='', callback, remove=False):
+    _known_event_types = []
+    def on_event(self, callback, event_type='', remove=False):
         """(un)Register a Python event=-handler functions.
         Default is to register for all event types.
         May be called repeatedly to set multiple callback functions.
@@ -187,16 +193,19 @@ class Video(widgets.DOMWidget):
         Supplied callback function(s) must accept two arguments: widget instance and event dict.
         Note: no checking is done to verify that supplied event type is valid.
         """
+        if event_type not in self._known_event_types:
+            self._known_event_types.append(event_type)
+
         if event_type not in self._event_dispatchers:
             self._event_dispatchers[event_type] = widgets.widget.CallbackDispatcher()
 
-        if event_type:
-            # Register with specified dispatcher
-            self._event_dispatchers[event_type].register_callback(callback, remove=remove)
-        else:
-            # Register with all known dispatchers
-            for v in self._event_dispatchers.values():
-                v.register_callback(callback, remove=remove)
+        # Register with specified dispatcher
+        self._event_dispatchers[event_type].register_callback(callback, remove=remove)
+
+        # else:
+        #     # Register with all known dispatchers
+        #     for v in self._event_dispatchers.values():
+        #         v.register_callback(callback, remove=remove)
 
     def on_pause(callback):
         """Register Python event handler for 'pause' event.

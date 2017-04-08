@@ -142,39 +142,48 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	        this.src_changed();
 	
-	        this.model.on('change:_method', this.invoke_method, this);
-	        this.model.on('change:_property', this.set_property, this);
-	        this.model.on('change:_play_pause', this.playPause_changed, this);
-	        this.model.on('change:src', this.src_changed, this);
-	        this.model.on('change:current_time', this.current_time_changed, this);
+	        // .listenTo() is better than .on()
+	        // http://backbonejs.org/#Events-listenTo
+	        // https://coderwall.com/p/fpxt4w/using-backbone-s-new-listento
+	
+	        // old: model.on("change", changeCallback), [context_object]);
+	        // new: context_object.listenTo(model, "change", changeCallback);
+	
+	        // this.model.on('change:_method', this.invoke_method, this);
+	        // this.model.on('change:_property', this.set_property, this);
+	        // this.model.on('change:_play_pause', this.play_pause_changed, this);
+	        // this.model.on('change:src', this.src_changed, this);
+	        // this.model.on('change:current_time', this.current_time_changed, this);
+	
+	        this.listenTo(this.model, 'change:_method',      this.invoke_method);
+	        this.listenTo(this.model, 'change:_property',    this.set_property);
+	        this.listenTo(this.model, 'change:_play_pause',  this.play_pause_changed);
+	        this.listenTo(this.model, 'change:src',          this.src_changed);
+	        this.listenTo(this.model, 'change:current_time', this.current_time_changed);
 	
 	        //-------------------------------------------------
-	        // Video element event handlers, with throttling in miliseconds
+	        // Video element event handlers
 	        // frontend --> backend
-	        var dt = 10;  // miliseconds
-	        var throttled_handle_event = throttle(this.handle_event, dt, this);
-	        this.video.addEventListener('durationchange', throttled_handle_event);
-	        this.video.addEventListener('ended',          throttled_handle_event);
-	        this.video.addEventListener('loadedmetadata', throttled_handle_event);
-	        this.video.addEventListener('pause',          throttled_handle_event);
-	        this.video.addEventListener('play',           throttled_handle_event);
-	        this.video.addEventListener('playing',        throttled_handle_event);
-	        this.video.addEventListener('ratechange',     throttled_handle_event);
-	        this.video.addEventListener('seeked',         throttled_handle_event);
-	        this.video.addEventListener('seeking',        throttled_handle_event);
-	        this.video.addEventListener('volumechange',   throttled_handle_event);
-	        this.video.addEventListener('timeupdate',     throttled_handle_event);
+	        this.video.addEventListener('durationchange', this.handle_event);
+	        this.video.addEventListener('ended',          this.handle_event);
+	        this.video.addEventListener('loadedmetadata', this.handle_event);
+	        this.video.addEventListener('pause',          this.handle_event);
+	        this.video.addEventListener('play',           this.handle_event);
+	        this.video.addEventListener('playing',        this.handle_event);
+	        this.video.addEventListener('ratechange',     this.handle_event);
+	        this.video.addEventListener('seeked',         this.handle_event);
+	        this.video.addEventListener('seeking',        this.handle_event);
+	        this.video.addEventListener('timeupdate',     this.handle_event);
+	        this.video.addEventListener('volumechange',   this.handle_event);
 	
-	        // // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
-	        // var throttled_handle_currentTime = throttle(this.handle_currentTime, dt, this);
-	        // this.video.addEventListener('timeupdate', throttled_handle_currentTime);
+	        // Special handling for play and pause events
+	        this.video.addEventListener('play',  this.handle_play);
+	        this.video.addEventListener('pause', this.handle_pause);
+	
+	        // Higher-frequency time updates
 	
 	        // Various mouse event handlers
-	        this.video.onwheel = function(ev) {
-	            // Prevent page from scrolling with mouse wheel when hovering over video
-	            ev.preventDefault();
-	        };
-	
+	        var dt = 10;  // miliseconds
 	        var throttled_mouse_wheel = throttle(this.handle_mouse_wheel, dt, this);
 	        this.video.addEventListener('wheel', throttled_mouse_wheel);
 	
@@ -188,18 +197,24 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	        //-------------------------------------------------
 	        // Minor tweaks
+	        // Prevent page from scrolling with mouse wheel when hovering over video
+	        this.video.onwheel = function(ev) {
+	            ev.preventDefault();
+	        };
+	
 	        // Prevent context menu popup from right-click on canvas
 	        this.video.oncontextmenu = function(ev) {
 	            ev.preventDefault();
 	        };
 	    },
 	
+	    //------------------------------------------------------------------------------------------
+	    // Functions defined below generally are called in response to changes in the backbone model.
+	    // Typical outcome is to make changes to some front-end components, or to make changes to other
+	    // model components.
 	    invoke_method: function() {
-	        // backend --> frontend
-	
 	        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
 	        var parts = this.model.get('_method');
-	
 	        var name = parts[0];
 	        var stamp = parts[1];
 	        var args = parts[2];
@@ -208,11 +223,8 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	    },
 	
 	    set_property: function() {
-	        // backend --> frontend
-	
 	        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
 	        var parts = this.model.get('_property');
-	
 	        var name = parts[0];
 	        var stamp = parts[1];
 	        var value = parts[2];
@@ -227,24 +239,37 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	    },
 	
 	    current_time_changed: function() {
-	        // backend --> frontend
-	        if (this.video.paused) {
+	        // HTML5 video element responds to backbone model changes.
+	        // if (this.video.paused) {  // should no longer need this if test...
 	            // Only respond if not currently playing.
-	            this.video['currentTime'] = this.model.get('current_time');
-	        }
+	        this.video['currentTime'] = this.model.get('current_time');
+	        // }
 	    },
 	
-	    playPause_changed: function() {
-	        // backend --> frontend
+	    play_pause_changed: function() {
 	        if (this.video.paused) {
-	            this.model.set('_method', ['play', Date.now(), ''])
-	            // this.video.play()
+	            this.play();
 	        } else {
-	            this.model.set('_method', ['pause', Date.now(), ''])
-	            // this.video.pause()
+	            this.pause();
 	        }
 	    },
 	
+	    play: function() {
+	        // Start video playback, handled through backbone system.
+	        this.model.set('_method', ['play', Date.now(), ''])
+	        this.touch();
+	    },
+	
+	    pause: function() {
+	        // Stop video playback, handled through backbone system.
+	        this.model.set('_method', ['pause', Date.now(), ''])
+	        this.touch();
+	    },
+	
+	    //-------------------------------------------------------------------------------------------
+	    // The various handle_<something> functions are written to respond to front-end
+	    // JavaScript-generated events.  The usual outcome is either changing a parameter in the
+	    // backbone model or changing some other front-end component.
 	    handle_event: function(ev) {
 	        // General video-element event handler
 	        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
@@ -260,8 +285,19 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	        // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
 	        this.model.set('current_time', ev.target['currentTime']);
+	        this.touch();
+	    },
 	
-	        this.touch();  // Must call this after any frontend modifications to Model data.
+	    handle_play: function(ev) {
+	        // console.log(ev);
+	        // Don't respond to current_time events while playing. The video itself the source of those
+	        // events, and responding to them will only cause hard-to-debug timming trouble.
+	        this.stopListening(this.model, 'change:current_time');
+	    },
+	
+	    handle_pause: function(ev) {
+	        // Once no longer playing it is safe again to listen for current_time events.
+	        this.listenTo(this.model, 'change:current_time', this.current_time_changed);
 	    },
 	
 	    // handle_currentTime: function(ev) {
@@ -300,7 +336,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	    },
 	
 	    handle_mouse_click: function(ev) {
-	        this.playPause_changed();
+	        this.play_pause_changed();
 	    },
 	
 	});
