@@ -3,4 +3,3 @@ ipywidgets
 jupyter
 notebook
 shortuuid
-traitlets
