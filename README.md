@@ -12,6 +12,32 @@ A Jupyter widget that nmakes it easy to play videos (local and remote) via HTML5
 
 -[npm folders](https://docs.npmjs.com/files/folders)
 
+
+## Notes and Ideas
+
+### Miscelaneous links
+
+- https://www.html5rocks.com/en/tutorials/video/basics/
+- https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
+- https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+- https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Video_and_audio_content
+- https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery
+- https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_manipulation
+
+### Good stuff implementing custom video player
+- https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/cross_browser_video_player
+
+### Video player styling
+- https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/Video_player_styling_basics
+
+### Media buffering and seeking, nice example displaying time ranges where video is loaded
+- https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/buffering_seeking_time_ranges
+
+### Media events
+- https://www.w3.org/2010/05/video/mediaevents.html
+
+
+
 ## Prerequisites
 
 ```bash

@@ -11,18 +11,47 @@ from ._version import __version__
 from .namespace import Struct
 from . import server
 
-__all__ = ['Video']
+__all__ = ['Video', 'TimeCode']
+
+@widgets.register()
+class TimeCode(widgets.HTMLWidget):
+    _view_name =   traitlets.Unicode('TimeCodeView').tag(sync=True)
+    _view_module = traitlets.Unicode('video').tag(sync=True)
+    _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
+
+    _model_name =   traitlets.Unicode('TimeCodeModel').tag(sync=True)
+    _model_module = traitlets.Unicode('video').tag(sync=True)
+    _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
+
+    # Private information
+    _method = traitlets.List().tag(sync=True)
+    _property = traitlets.List().tag(sync=True)
+    _play_pause = traitlets.Bool(False).tag(sync=True)
+    _event = traitlets.Dict().tag(sync=True)
+
+    # Public information
+    src = traitlets.Unicode('').tag(sync=True)
+    current_time = traitlets.Float().tag(sync=True)
+
+    def __init__(self, source=None):
+        """Create new widget instance
+        """
+        super().__init__()
+
+        self.properties = Struct()
+        self.server = None
+
 
 @widgets.register()
 class Video(widgets.DOMWidget):
     """HTML5 video player as a Jupyter widget
     """
     _view_name =   traitlets.Unicode('VideoView').tag(sync=True)
-    _view_module = traitlets.Unicode('video_widget').tag(sync=True)
+    _view_module = traitlets.Unicode('video').tag(sync=True)
     _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     _model_name =   traitlets.Unicode('VideoModel').tag(sync=True)
-    _model_module = traitlets.Unicode('video_widget').tag(sync=True)
+    _model_module = traitlets.Unicode('video').tag(sync=True)
     _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     # Private information
