@@ -28,8 +28,8 @@ class Video(widgets.DOMWidget):
     # Private information
     _method = traitlets.List().tag(sync=True)
     _property = traitlets.List().tag(sync=True)
-    _event = traitlets.Dict().tag(sync=True)
     _play_pause = traitlets.Bool(False).tag(sync=True)
+    _event = traitlets.Dict().tag(sync=True)
 
     # Public information
     src = traitlets.Unicode('').tag(sync=True)
@@ -147,25 +147,37 @@ class Video(widgets.DOMWidget):
 
     #--------------------------------------------
     # Event handler stuff
-    @traitlets.observe('_event')
+    # def handle_current_time(self, change):
+    #     pass
+
+
+    @traitlets.observe('current_time', '_event')
     def _handle_event(self, change):
-        """Respond to front-end events
+        """Respond to front-end backbone events
         https://traitlets.readthedocs.io/en/stable/api.html#callbacks-when-trait-attributes-change
         """
         assert(change['type'] == 'change')
-        assert(change['name'] == '_event')
-        event = change['new']
 
-        # Update internal copy of Video element properties
-        self.properties.update(event)
+        if change['name'] == '_event':
+            event = change['new']   # new stuff is a dict of information from front end
+            self.properties.update(event)
+        elif change['name'] == 'current_time':
+            event = {'type': 'timeupdate',     # new stuff is a single number for current_time
+                     'currentTime': change['new']}
+            self.properties.update(event)
+        else:
+            # raise error or not?
+            return
 
-        # Call any event-specific registered handlers
+        # Call any registered event-specific handler functions
         if event['type'] in self._event_dispatchers:
             self._event_dispatchers[event['type']](self, **event)
 
-        # Call any general event handlers
+        # Call any general event handler function
         if '' in self._event_dispatchers:
             self._event_dispatchers[''](self, **event)
+
+
 
     #--------------------------------------------
     # Register Python event handlers

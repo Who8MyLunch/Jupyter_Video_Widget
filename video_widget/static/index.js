@@ -136,9 +136,9 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        this.video = document.createElement('video');
 	        this.setElement(this.video);
 	
-	        this.video.controls = true;
 	        this.video.preload = 'metadata';
 	        this.video.autoplay = false;
+	        this.video.controls = true;
 	
 	        this.src_changed();
 	
@@ -164,21 +164,23 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        //-------------------------------------------------
 	        // Video element event handlers
 	        // frontend --> backend
-	        this.video.addEventListener('durationchange', this.handle_event);
-	        this.video.addEventListener('ended',          this.handle_event);
-	        this.video.addEventListener('loadedmetadata', this.handle_event);
-	        this.video.addEventListener('pause',          this.handle_event);
-	        this.video.addEventListener('play',           this.handle_event);
-	        this.video.addEventListener('playing',        this.handle_event);
-	        this.video.addEventListener('ratechange',     this.handle_event);
-	        this.video.addEventListener('seeked',         this.handle_event);
-	        this.video.addEventListener('seeking',        this.handle_event);
-	        this.video.addEventListener('timeupdate',     this.handle_event);
-	        this.video.addEventListener('volumechange',   this.handle_event);
+	        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+	        this.video.addEventListener('durationchange', this.handle_event.bind(this), false);
+	        this.video.addEventListener('ended',          this.handle_event.bind(this), false);
+	        this.video.addEventListener('loadedmetadata', this.handle_event.bind(this), false);
+	        this.video.addEventListener('pause',          this.handle_event.bind(this), false);
+	        this.video.addEventListener('play',           this.handle_event.bind(this), false);
+	        this.video.addEventListener('playing',        this.handle_event.bind(this), false);
+	        this.video.addEventListener('ratechange',     this.handle_event.bind(this), false);
+	        this.video.addEventListener('seeked',         this.handle_event.bind(this), false);
+	        this.video.addEventListener('seeking',        this.handle_event.bind(this), false);
+	        this.video.addEventListener('timeupdate',     this.handle_event.bind(this), false);
+	        this.video.addEventListener('volumechange',   this.handle_event.bind(this), false);
 	
 	        // Special handling for play and pause events
-	        this.video.addEventListener('play',  this.handle_play);
-	        this.video.addEventListener('pause', this.handle_pause);
+	        this.enable_fast_time_update = false
+	        this.video.addEventListener('play',  this.handle_play.bind(this), false);
+	        this.video.addEventListener('pause', this.handle_pause.bind(this), false);
 	
 	        // Higher-frequency time updates
 	
@@ -288,16 +290,32 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        this.touch();
 	    },
 	
+	    fast_time_update: function() {
+	        this.model.set('current_time', this.video['currentTime']);
+	        this.touch();
+	
+	        if (this.enable_fast_time_update) {
+	            setTimeout(this.fast_time_update.bind(this), 200);
+	        }
+	    },
+	
 	    handle_play: function(ev) {
 	        // console.log(ev);
 	        // Don't respond to current_time events while playing. The video itself the source of those
 	        // events, and responding to them will only cause hard-to-debug timming trouble.
 	        this.stopListening(this.model, 'change:current_time');
+	
+	        // Emit time updates at faster rate
+	        this.enable_fast_time_update = true;
+	        this.fast_time_update();
 	    },
 	
 	    handle_pause: function(ev) {
 	        // Once no longer playing it is safe again to listen for current_time events.
 	        this.listenTo(this.model, 'change:current_time', this.current_time_changed);
+	
+	        // Stop emitting time updates at faster rate
+	        this.enable_fast_time_update = false;
 	    },
 	
 	    // handle_currentTime: function(ev) {
