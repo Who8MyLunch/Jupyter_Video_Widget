@@ -37,8 +37,8 @@ var TimeCodeModel = widgets.HTMLModel.extend({
     defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
         _model_name:   'TimeCodeModel',
         _view_name:    'TimeCodeView',
-        _model_module: 'video',
-        _view_module:  'video',
+        _model_module: 'jupyter-video',
+        _view_module:  'jupyter-video',
     })
 });
 
@@ -47,8 +47,8 @@ var VideoModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
         _model_name:   'VideoModel',
         _view_name:    'VideoView',
-        _model_module: 'video',
-        _view_module:  'video',
+        _model_module: 'jupyter-video',
+        _view_module:  'jupyter-video',
     })
 });
 

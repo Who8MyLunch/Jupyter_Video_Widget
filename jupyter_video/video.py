@@ -16,11 +16,11 @@ __all__ = ['Video', 'TimeCode']
 @widgets.register()
 class TimeCode(widgets.HTML):
     _view_name =   traitlets.Unicode('TimeCodeView').tag(sync=True)
-    _view_module = traitlets.Unicode('video').tag(sync=True)
+    _view_module = traitlets.Unicode('jupyter-video').tag(sync=True)
     _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     _model_name =   traitlets.Unicode('TimeCodeModel').tag(sync=True)
-    _model_module = traitlets.Unicode('video').tag(sync=True)
+    _model_module = traitlets.Unicode('jupyter-video').tag(sync=True)
     _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     # Private information
@@ -47,11 +47,11 @@ class Video(widgets.DOMWidget):
     """HTML5 video player as a Jupyter widget
     """
     _view_name =   traitlets.Unicode('VideoView').tag(sync=True)
-    _view_module = traitlets.Unicode('video').tag(sync=True)
+    _view_module = traitlets.Unicode('jupyter-video').tag(sync=True)
     _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     _model_name =   traitlets.Unicode('VideoModel').tag(sync=True)
-    _model_module = traitlets.Unicode('video').tag(sync=True)
+    _model_module = traitlets.Unicode('jupyter-video').tag(sync=True)
     _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     # Private information

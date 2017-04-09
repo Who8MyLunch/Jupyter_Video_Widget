@@ -58,7 +58,7 @@ module.exports = [
             filename: 'index.js',
             path: './dist/',
             libraryTarget: 'amd',
-            publicPath: 'https://unpkg.com/jupyter_video@' + version + '/dist/'
+            //publicPath: 'https://unpkg.com/jupyter_video@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {
