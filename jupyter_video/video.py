@@ -14,7 +14,7 @@ from . import server
 __all__ = ['Video', 'TimeCode']
 
 @widgets.register()
-class TimeCode(widgets.HTMLWidget):
+class TimeCode(widgets.HTML):
     _view_name =   traitlets.Unicode('TimeCodeView').tag(sync=True)
     _view_module = traitlets.Unicode('video').tag(sync=True)
     _view_module_version = traitlets.Unicode(__version__).tag(sync=True)

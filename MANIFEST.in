@@ -1,1 +1,1 @@
-recursive-include video_widget/static *.*
+recursive-include jupyter_video/static *.*

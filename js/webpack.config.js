@@ -23,6 +23,7 @@ module.exports = [
             libraryTarget: 'amd'
         }
     },
+
     {// Bundle for the notebook containing the custom widget views and models
      //
      // This bundle contains the implementation for the custom widget views and
@@ -40,6 +41,7 @@ module.exports = [
         },
         externals: ['jupyter-js-widgets']
     },
+
     {// Embeddable jupyter_video_widget bundle
      //
      // This bundle is generally almost identical to the notebook bundle

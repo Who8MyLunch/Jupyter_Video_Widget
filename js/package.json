@@ -1,5 +1,5 @@
 {
-  "name": "video_widget",
+  "name": "jupyter-video",
   "version": "0.1.0",
   "description": "HMTL5 video player widget",
   "author": "Pierre Villeneuve",

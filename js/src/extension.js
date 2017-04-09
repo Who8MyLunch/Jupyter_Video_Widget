@@ -7,7 +7,7 @@ if (window.require) {
     window.require.config({
         map: {
             "*" : {
-                "jupyter_video":      "nbextensions/jupyter_video/index",
+                "jupyter-video":      "nbextensions/jupyter-video/index",
                 "jupyter-js-widgets": "nbextensions/jupyter-js-widgets/extension"
             }
         }
