@@ -19,7 +19,7 @@ module.exports = [
         entry: './src/extension.js',
         output: {
             filename: 'extension.js',
-            path: '../jupyter_video/static',
+            path: '../jpy_video/static',
             libraryTarget: 'amd'
         }
     },
@@ -32,7 +32,7 @@ module.exports = [
         entry: './src/index.js',
         output: {
             filename: 'index.js',
-            path: '../jupyter_video/static',
+            path: '../jpy_video/static',
             libraryTarget: 'amd'
         },
         devtool: 'source-map',
@@ -58,7 +58,7 @@ module.exports = [
             filename: 'index.js',
             path: './dist/',
             libraryTarget: 'amd',
-            //publicPath: 'https://unpkg.com/jupyter_video@' + version + '/dist/'
+            //publicPath: 'https://unpkg.com/jpy_video@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {

@@ -51,7 +51,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	// Some static assets may be required by the custom widget javascript. The base
 	// url for the notebook is not known at build time and is therefore computed
 	// dynamically.
-	__webpack_require__.p = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyter_video/';
+	__webpack_require__.p = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyter-video/';
 	
 	// Export widget models and views, and the npm package version number.
 	module.exports = __webpack_require__(1);
@@ -101,8 +101,8 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	    defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
 	        _model_name:   'TimeCodeModel',
 	        _view_name:    'TimeCodeView',
-	        _model_module: 'video',
-	        _view_module:  'video',
+	        _model_module: 'jupyter-video',
+	        _view_module:  'jupyter-video',
 	    })
 	});
 	
@@ -111,8 +111,8 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
 	        _model_name:   'VideoModel',
 	        _view_name:    'VideoView',
-	        _model_module: 'video',
-	        _view_module:  'video',
+	        _model_module: 'jupyter-video',
+	        _view_module:  'jupyter-video',
 	    })
 	});
 	
@@ -123,10 +123,6 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	var TimeCodeView = widgets.HTMLView.extend({
 	    render: function() {
-	        // This project's view is a single <video/> element.
-	        this.video = document.createElement('video');
-	        this.setElement(this.video);
-	
 	        this.listenTo(this.model, 'change:current_time', this.current_time_changed);
 	    },
 	
@@ -370,10 +366,10 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	//-----------------------------------------------
 	
 	module.exports = {
-	    VideoModel: VideoModel,
-	    VideoView: VideoView,
 	    TimeCodeModel: TimeCodeModel,
-	    TimeCodeView: TimeCodeView
+	    TimeCodeView: TimeCodeView,
+	    VideoModel: VideoModel,
+	    VideoView: VideoView
 	};
 
 
@@ -1942,7 +1938,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 /***/ function(module, exports) {
 
 	module.exports = {
-		"name": "video_widget",
+		"name": "jupyter-video",
 		"version": "0.1.0",
 		"description": "HMTL5 video player widget",
 		"author": "Pierre Villeneuve",

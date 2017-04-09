@@ -66,8 +66,8 @@ class NPM(Command):
     node_modules = os.path.join(node_root, 'node_modules')
 
     targets = [
-        os.path.join(here, 'jupyter_video', 'static', 'extension.js'),
-        os.path.join(here, 'jupyter_video', 'static', 'index.js')
+        os.path.join(here, 'jpy_video', 'static', 'extension.js'),
+        os.path.join(here, 'jpy_video', 'static', 'index.js')
     ]
 
     def initialize_options(self):
@@ -112,7 +112,7 @@ class NPM(Command):
         update_package_data(self.distribution)
 
 version_ns = {}
-with open(os.path.join(here, 'jupyter_video', '_version.py')) as f:
+with open(os.path.join(here, 'jpy_video', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = {
@@ -122,14 +122,18 @@ setup_args = {
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
-        ('share/jupyter/nbextensions/jupyter_video', [
+        ('share/jupyter/nbextensions/jupyter-video', [
             'jupyter_video/static/extension.js',
             'jupyter_video/static/index.js',
             'jupyter_video/static/index.js.map',
         ]),
     ],
     'install_requires': [
+        'ipython',
+        'jupyter',
+        'notebook',
         'ipywidgets>=6.0.0',
+        'shortuuid',
     ],
     'packages': find_packages(),
     'zip_safe': False,
@@ -144,6 +148,8 @@ setup_args = {
     'author_email': 'pierre.villeneuve@gmail.com',
     'url': 'http://github.com/who8mylunch',
     'keywords': ['ipython', 'jupyter', 'widgets', 'video', 'html5'],
+    'license': 'MIT',
+    'platform': 'Jupyter',
     'classifiers': [
         'Development Status :: 4 - Beta',
         'Framework :: Jupyter',

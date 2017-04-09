@@ -59,10 +59,6 @@ var VideoModel = widgets.DOMWidgetModel.extend({
 
 var TimeCodeView = widgets.HTMLView.extend({
     render: function() {
-        // This project's view is a single <video/> element.
-        this.video = document.createElement('video');
-        this.setElement(this.video);
-
         this.listenTo(this.model, 'change:current_time', this.current_time_changed);
     },
 
@@ -306,8 +302,8 @@ var VideoView = widgets.DOMWidgetView.extend({
 //-----------------------------------------------
 
 module.exports = {
-    VideoModel: VideoModel,
-    VideoView: VideoView,
     TimeCodeModel: TimeCodeModel,
-    TimeCodeView: TimeCodeView
+    TimeCodeView: TimeCodeView,
+    VideoModel: VideoModel,
+    VideoView: VideoView
 };

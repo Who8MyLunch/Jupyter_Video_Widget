@@ -1,4 +1,4 @@
-A Custom Jupyter Widget Library
+# Custom Jupyter Widget for HTML5 Video
 
 ## Package Install
 

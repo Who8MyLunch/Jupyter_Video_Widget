@@ -13,8 +13,6 @@ A Jupyter widget that nmakes it easy to play videos (local and remote) via HTML5
 -[npm folders](https://docs.npmjs.com/files/folders)
 
 
-## Notes and Ideas
-
 ### Miscelaneous links
 
 - https://www.html5rocks.com/en/tutorials/video/basics/
@@ -24,7 +22,7 @@ A Jupyter widget that nmakes it easy to play videos (local and remote) via HTML5
 - https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery
 - https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_manipulation
 
-### Good stuff implementing custom video player
+### Good stuff about implementing custom video player
 - https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/cross_browser_video_player
 
 ### Video player styling
@@ -49,9 +47,9 @@ jupyter nbextension enable --py --sys-prefix widgetsnbextension
 Use pip to install:
 
 ```bash
-pip install Jupyter_Video_Widget
+pip install Jupyter-Video-Widget
 
-jupyter nbextension enable --py --sys-prefix jupyter_video
+jupyter nbextension enable --py --sys-prefix jpy_video
 ```
 
 ## Developer Installation
@@ -64,14 +62,14 @@ git clone git@github.com:Who8MyLunch/Jupyter_Video_Widget.git
 cd Jupyter_Video_Widget
 
 pip install -e .
-jupyter nbextension install --py --symlink --sys-prefix jupyter_video
-jupyter nbextension enable  --py           --sys-prefix jupyter_video
+jupyter nbextension install --py --symlink --sys-prefix jpy_video
+jupyter nbextension enable  --py           --sys-prefix jpy_video
 ```
 
 ## Which Files to Edit?
 
 - Jupyter_Video_Widget/
-    - jupyter_video/            *All Python code lives here*
+    - jpy_video/                *All Python code lives here*
         - static/
         - __init__.py
         - _version.py
@@ -82,13 +80,17 @@ jupyter nbextension enable  --py           --sys-prefix jupyter_video
         - dist/
         - node_modules/
         - src/
-            - video.js          *Widget javaScript code*
+            - jupyter-video.js  *Widget javaScript code*
             - embed.js          *Only edit to update exported module name (e.g. video.js)*
             - index.js          *Only edit to update exported module name (e.g. video.js)*
             - extension.js
         - README.md
         - package.json          *Double check author name, email address, github org., etc.*
         - webpack.config.js     *Contains path to static JS folder on the Python side*
+    - setup.py
+    - setup.cfg
+    - MANIFEST.in               *Relative path to static folder under jpy_video*
+    - requirements.txt
 
 ## After Making an Edit
 
