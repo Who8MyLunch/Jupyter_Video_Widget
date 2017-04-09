@@ -19,7 +19,7 @@ module.exports = [
         entry: './src/extension.js',
         output: {
             filename: 'extension.js',
-            path: '../video_widget/static',
+            path: '../jupyter_video/static',
             libraryTarget: 'amd'
         }
     },
@@ -31,7 +31,7 @@ module.exports = [
         entry: './src/index.js',
         output: {
             filename: 'index.js',
-            path: '../video_widget/static',
+            path: '../jupyter_video/static',
             libraryTarget: 'amd'
         },
         devtool: 'source-map',
@@ -43,11 +43,8 @@ module.exports = [
     {// Embeddable jupyter_video_widget bundle
      //
      // This bundle is generally almost identical to the notebook bundle
-     // containing the custom widget views and models.
-     //
-     // The only difference is in the configuration of the webpack public path
-     // for the static assets.
-     //
+     // containing the custom widget views and models.  The only difference
+     // is in the configuration of the webpack public path for the static assets.
      // It will be automatically distributed by unpkg to work with the static
      // widget embedder.
      //
@@ -59,7 +56,7 @@ module.exports = [
             filename: 'index.js',
             path: './dist/',
             libraryTarget: 'amd',
-            publicPath: 'https://unpkg.com/video_widget@' + version + '/dist/'
+            publicPath: 'https://unpkg.com/jupyter_video@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {

@@ -51,7 +51,7 @@ Use pip to install:
 ```bash
 pip install Jupyter_Video_Widget
 
-jupyter nbextension enable --py --sys-prefix video_widget
+jupyter nbextension enable --py --sys-prefix jupyter_video
 ```
 
 ## Developer Installation
@@ -64,16 +64,14 @@ git clone git@github.com:Who8MyLunch/Jupyter_Video_Widget.git
 cd Jupyter_Video_Widget
 
 pip install -e .
-jupyter nbextension install --py --symlink --sys-prefix video_widget
-jupyter nbextension enable  --py           --sys-prefix video_widget
+jupyter nbextension install --py --symlink --sys-prefix jupyter_video
+jupyter nbextension enable  --py           --sys-prefix jupyter_video
 ```
-
-# Developer Workflow
 
 ## Which Files to Edit?
 
 - Jupyter_Video_Widget/
-    - video_widget/             *All Python code lives here*
+    - jupyter_video/            *All Python code lives here*
         - static/
         - __init__.py
         - _version.py
@@ -90,7 +88,7 @@ jupyter nbextension enable  --py           --sys-prefix video_widget
             - extension.js
         - README.md
         - package.json          *Double check author name, email address, github org., etc.*
-        - webpack.config.js 
+        - webpack.config.js     *Contains path to static JS folder on the Python side*
 
 ## After Making an Edit
 

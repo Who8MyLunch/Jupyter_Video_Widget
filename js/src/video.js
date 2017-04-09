@@ -27,15 +27,14 @@ function throttle(fn, threshhold, scope) {
 }
 
 //-----------------------------------------------
-//-----------------------------------------------
 
 // Widget models must provide default values for the model attributes that are
 // different from the base class.  These include at least `_model_name`, `_view_name`,
 // `_model_module`, and `_view_module`.  When serialiazing entire widget state for embedding,
 // only values different from default will be specified.
 
-var TimeCodeModel = widgets.DOMWidgetModel.extend({
-    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
+var TimeCodeModel = widgets.HTMLModel.extend({
+    defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
         _model_name:   'TimeCodeModel',
         _view_name:    'TimeCodeView',
         _model_module: 'video',
@@ -44,8 +43,8 @@ var TimeCodeModel = widgets.DOMWidgetModel.extend({
 });
 
 
-var VideoModel = widgets.HTMLModel.extend({
-    defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
+var VideoModel = widgets.DOMWidgetModel.extend({
+    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
         _model_name:   'VideoModel',
         _view_name:    'VideoView',
         _model_module: 'video',
@@ -55,30 +54,27 @@ var VideoModel = widgets.HTMLModel.extend({
 
 
 //-----------------------------------------------
-//-----------------------------------------------
 
 // Widget View renders the model to the DOM
 
 var TimeCodeView = widgets.HTMLView.extend({
-
     render: function() {
         // This project's view is a single <video/> element.
         this.video = document.createElement('video');
         this.setElement(this.video);
 
-        this.listenTo(this.model, 'change:_method',      this.invoke_method);
-        this.listenTo(this.model, 'change:_property',    this.set_property);
-        this.listenTo(this.model, 'change:_play_pause',  this.play_pause_changed);
-        this.listenTo(this.model, 'change:src',          this.src_changed);
         this.listenTo(this.model, 'change:current_time', this.current_time_changed);
+    },
 
+    current_time_changed: function() {
+        // HTML5 video element responds to backbone model changes.
+        this.video['currentTime'] = this.model.get('current_time');
     },
 });
 
 
 
 var VideoView = widgets.DOMWidgetView.extend({
-
     render: function() {
         // This project's view is a single <video/> element.
         this.video = document.createElement('video');
@@ -311,5 +307,7 @@ var VideoView = widgets.DOMWidgetView.extend({
 
 module.exports = {
     VideoModel: VideoModel,
-    VideoView: VideoView
+    VideoView: VideoView,
+    TimeCodeModel: TimeCodeModel,
+    TimeCodeView: TimeCodeView
 };

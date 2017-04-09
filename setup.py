@@ -66,8 +66,8 @@ class NPM(Command):
     node_modules = os.path.join(node_root, 'node_modules')
 
     targets = [
-        os.path.join(here, 'video_widget', 'static', 'extension.js'),
-        os.path.join(here, 'video_widget', 'static', 'index.js')
+        os.path.join(here, 'jupyter_video', 'static', 'extension.js'),
+        os.path.join(here, 'jupyter_video', 'static', 'index.js')
     ]
 
     def initialize_options(self):
@@ -112,20 +112,20 @@ class NPM(Command):
         update_package_data(self.distribution)
 
 version_ns = {}
-with open(os.path.join(here, 'video_widget', '_version.py')) as f:
+with open(os.path.join(here, 'jupyter_video', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = {
-    'name': 'Jupyter_Video_Widget',
+    'name': 'Jupyter_jupyter_video',
     'version': version_ns['__version__'],
     'description': 'A Jupyter HTML5 Video Player Widget',
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
-        ('share/jupyter/nbextensions/video_widget', [
-            'video_widget/static/extension.js',
-            'video_widget/static/index.js',
-            'video_widget/static/index.js.map',
+        ('share/jupyter/nbextensions/jupyter_video', [
+            'jupyter_video/static/extension.js',
+            'jupyter_video/static/index.js',
+            'jupyter_video/static/index.js.map',
         ]),
     ],
     'install_requires': [

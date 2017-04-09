@@ -51,7 +51,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	// Some static assets may be required by the custom widget javascript. The base
 	// url for the notebook is not known at build time and is therefore computed
 	// dynamically.
-	__webpack_require__.p = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/video_widget/';
+	__webpack_require__.p = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyter_video/';
 	
 	// Export widget models and views, and the npm package version number.
 	module.exports = __webpack_require__(1);
@@ -75,8 +75,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	  return function () {
 	    var context = scope || this;
 	
-	    var now = +new Date,
-	        args = arguments;
+	    var now = +new Date, args = arguments;
 	    if (last && now < last + threshhold) {
 	      // hold on to it
 	      clearTimeout(deferTimer);
@@ -91,46 +90,55 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	  };
 	}
 	
+	//-----------------------------------------------
 	
-	// Custom Model. Custom widgets models must at least provide default values for model
-	// attributes when different from the base class.  These include `_model_name`,
-	// `_view_name`, `_model_module`, and `_view_module` .
-	//
-	// When serialiazing entire widget state for embedding, only values different from the
-	// defaults will be specified.
-	var VideoModel = widgets.DOMWidgetModel.extend({
-	    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
-	        _model_name: 'VideoModel',
-	        _view_name: 'VideoView',
-	        _model_module: 'video_widget',
-	        _view_module: 'video_widget',
+	// Widget models must provide default values for the model attributes that are
+	// different from the base class.  These include at least `_model_name`, `_view_name`,
+	// `_model_module`, and `_view_module`.  When serialiazing entire widget state for embedding,
+	// only values different from default will be specified.
+	
+	var TimeCodeModel = widgets.HTMLModel.extend({
+	    defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
+	        _model_name:   'TimeCodeModel',
+	        _view_name:    'TimeCodeView',
+	        _model_module: 'video',
+	        _view_module:  'video',
 	    })
 	});
 	
 	
-	// Custom Widget View to render the model.
+	var VideoModel = widgets.DOMWidgetModel.extend({
+	    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
+	        _model_name:   'VideoModel',
+	        _view_name:    'VideoView',
+	        _model_module: 'video',
+	        _view_module:  'video',
+	    })
+	});
 	
-	// https://www.html5rocks.com/en/tutorials/video/basics/
-	// https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
-	// https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
-	// https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Video_and_audio_content
-	// https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery
-	// https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_manipulation
 	
-	// Good stuff implementing custom video player
-	// https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/cross_browser_video_player
+	//-----------------------------------------------
 	
-	// Video player styling
-	// https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/Video_player_styling_basics
+	// Widget View renders the model to the DOM
 	
-	// Media buffering and seeking, nice example displaying time ranges where video is loaded
-	// https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/buffering_seeking_time_ranges
+	var TimeCodeView = widgets.HTMLView.extend({
+	    render: function() {
+	        // This project's view is a single <video/> element.
+	        this.video = document.createElement('video');
+	        this.setElement(this.video);
 	
-	//  great example of capturing and displaying event info
-	// https://www.w3.org/2010/05/video/mediaevents.html
+	        this.listenTo(this.model, 'change:current_time', this.current_time_changed);
+	    },
+	
+	    current_time_changed: function() {
+	        // HTML5 video element responds to backbone model changes.
+	        this.video['currentTime'] = this.model.get('current_time');
+	    },
+	});
+	
+	
 	
 	var VideoView = widgets.DOMWidgetView.extend({
-	
 	    render: function() {
 	        // This project's view is a single <video/> element.
 	        this.video = document.createElement('video');
@@ -295,7 +303,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        this.touch();
 	
 	        if (this.enable_fast_time_update) {
-	            setTimeout(this.fast_time_update.bind(this), 200);
+	            setTimeout(this.fast_time_update.bind(this), 100);
 	        }
 	    },
 	
@@ -356,12 +364,16 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	    handle_mouse_click: function(ev) {
 	        this.play_pause_changed();
 	    },
-	
 	});
+	
+	
+	//-----------------------------------------------
 	
 	module.exports = {
 	    VideoModel: VideoModel,
-	    VideoView: VideoView
+	    VideoView: VideoView,
+	    TimeCodeModel: TimeCodeModel,
+	    TimeCodeView: TimeCodeView
 	};
 
 

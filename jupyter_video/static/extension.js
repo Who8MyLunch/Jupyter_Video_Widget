@@ -53,7 +53,7 @@ define(function() { return /******/ (function(modules) { // webpackBootstrap
 	    window.require.config({
 	        map: {
 	            "*" : {
-	                "video_widget": "nbextensions/video_widget/index",
+	                "jupyter_video":      "nbextensions/jupyter_video/index",
 	                "jupyter-js-widgets": "nbextensions/jupyter-js-widgets/extension"
 	            }
 	        }
