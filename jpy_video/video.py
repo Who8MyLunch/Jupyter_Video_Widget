@@ -11,10 +11,14 @@ from ._version import __version__
 from .namespace import Struct
 from . import server
 
+
 __all__ = ['Video', 'TimeCode']
+
 
 @widgets.register()
 class TimeCode(widgets.HTML):
+    """Nicely-formatted timecode text display
+    """
     _view_name =   traitlets.Unicode('TimeCodeView').tag(sync=True)
     _view_module = traitlets.Unicode('jupyter-video').tag(sync=True)
     _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
@@ -23,23 +27,10 @@ class TimeCode(widgets.HTML):
     _model_module = traitlets.Unicode('jupyter-video').tag(sync=True)
     _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
-    # Private information
-    _method = traitlets.List().tag(sync=True)
-    _property = traitlets.List().tag(sync=True)
-    _play_pause = traitlets.Bool(False).tag(sync=True)
-    _event = traitlets.Dict().tag(sync=True)
-
     # Public information
-    src = traitlets.Unicode('').tag(sync=True)
-    current_time = traitlets.Float().tag(sync=True)
+    time_code = traitlets.Float().tag(sync=True)
 
-    def __init__(self, source=None):
-        """Create new widget instance
-        """
-        super().__init__()
 
-        self.properties = Struct()
-        self.server = None
 
 
 @widgets.register()

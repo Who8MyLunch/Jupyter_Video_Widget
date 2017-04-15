@@ -90,6 +90,12 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	  };
 	}
 	
+	function zero_pad_two_digits(number) {
+	    var size = 2;
+	    var pretty = "00" + number;
+	    return pretty.substr(pretty.length-size);
+	}
+	
 	//-----------------------------------------------
 	
 	// Widget models must provide default values for the model attributes that are
@@ -100,8 +106,9 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	var TimeCodeModel = widgets.HTMLModel.extend({
 	    defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
 	        _model_name:   'TimeCodeModel',
-	        _view_name:    'TimeCodeView',
 	        _model_module: 'jupyter-video',
+	
+	        _view_name:    'TimeCodeView',
 	        _view_module:  'jupyter-video',
 	    })
 	});
@@ -110,8 +117,9 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	var VideoModel = widgets.DOMWidgetModel.extend({
 	    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
 	        _model_name:   'VideoModel',
-	        _view_name:    'VideoView',
 	        _model_module: 'jupyter-video',
+	
+	        _view_name:    'VideoView',
 	        _view_module:  'jupyter-video',
 	    })
 	});
@@ -123,12 +131,39 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	var TimeCodeView = widgets.HTMLView.extend({
 	    render: function() {
-	        this.listenTo(this.model, 'change:current_time', this.current_time_changed);
+	        this.el.textContent = this.model.get('value');
+	        this.listenTo(this.model, 'change:timecode', this.timecode_changed);
 	    },
 	
-	    current_time_changed: function() {
-	        // HTML5 video element responds to backbone model changes.
-	        this.video['currentTime'] = this.model.get('current_time');
+	    timecode_changed: function() {
+	        var time_base = 1/30;
+	
+	        var t = this.model.get('timecode');  //  current video time in seconds
+	
+	        var h = Math.floor((t/3600));
+	        var m = Math.floor((t % 3600)/60);
+	        var s = Math.floor((t % 60));
+	        var f = Math.floor((t % 1)/time_base);
+	
+	        // Pretty timecode string
+	        var time_string = zero_pad_two_digits(h) + ':' +
+	                          zero_pad_two_digits(m) + ':' +
+	                          zero_pad_two_digits(s) + ':' +
+	                          zero_pad_two_digits(f);
+	
+	        var html = `<p style="font-family:  DejaVu Sans Mono, Consolas, Lucida Console, Monospace;'
+	                              font-variant: normal;
+	                              font-weight:  bold;
+	                              font-style:   normal;
+	                              margin-left:  2pt;
+	                              margin-right: 2pt;
+	                              font-size:    10pt;
+	                              line-height:  13pt;">
+	                    ${time_string}</p>`;
+	
+	        this.el.textContent = html;
+	        // this.model.set('value', html);
+	        // this.touch();
 	    },
 	});
 	
@@ -149,16 +184,6 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        // .listenTo() is better than .on()
 	        // http://backbonejs.org/#Events-listenTo
 	        // https://coderwall.com/p/fpxt4w/using-backbone-s-new-listento
-	
-	        // old: model.on("change", changeCallback), [context_object]);
-	        // new: context_object.listenTo(model, "change", changeCallback);
-	
-	        // this.model.on('change:_method', this.invoke_method, this);
-	        // this.model.on('change:_property', this.set_property, this);
-	        // this.model.on('change:_play_pause', this.play_pause_changed, this);
-	        // this.model.on('change:src', this.src_changed, this);
-	        // this.model.on('change:current_time', this.current_time_changed, this);
-	
 	        this.listenTo(this.model, 'change:_method',      this.invoke_method);
 	        this.listenTo(this.model, 'change:_property',    this.set_property);
 	        this.listenTo(this.model, 'change:_play_pause',  this.play_pause_changed);
@@ -183,7 +208,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	        // Special handling for play and pause events
 	        this.enable_fast_time_update = false
-	        this.video.addEventListener('play',  this.handle_play.bind(this), false);
+	        this.video.addEventListener('play',  this.handle_play.bind(this),  false);
 	        this.video.addEventListener('pause', this.handle_pause.bind(this), false);
 	
 	        // Higher-frequency time updates
@@ -262,13 +287,13 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	    play: function() {
 	        // Start video playback, handled through backbone system.
-	        this.model.set('_method', ['play', Date.now(), ''])
+	        this.model.set('_method', ['play', Date.now(), '']);
 	        this.touch();
 	    },
 	
 	    pause: function() {
 	        // Stop video playback, handled through backbone system.
-	        this.model.set('_method', ['pause', Date.now(), ''])
+	        this.model.set('_method', ['pause', Date.now(), '']);
 	        this.touch();
 	    },
 	
@@ -281,13 +306,13 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
 	        var fields = ['clientHeight', 'clientWidth', 'controls', 'currentTime', 'currentSrc',
 	                      'duration', 'ended', 'muted', 'paused', 'playbackRate',
-	                      'readyState', 'seeking', 'videoHeight', 'videoWidth', 'volume']
+	                      'readyState', 'seeking', 'videoHeight', 'videoWidth', 'volume'];
 	
 	        var pev = {'type': ev.type};
 	        for (let f of fields) {
 	            pev[f] = ev.target[f];
 	        }
-	        this.model.set('_event', pev)
+	        this.model.set('_event', pev);
 	
 	        // https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate
 	        this.model.set('current_time', ev.target['currentTime']);
@@ -334,7 +359,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	    handle_mouse_wheel: function(ev) {
 	        // scrubbing takes over standard playback.
-	        this.video.pause()
+	        this.video.pause();
 	
 	        // Increment size
 	        // if ev.altKey
@@ -350,10 +375,10 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	
 	        if (ev.deltaY > 0) {
 	            // Scrub forwards
-	            this.video.currentTime += increment
+	            this.video.currentTime += increment;
 	        } else {
 	            // Scrub backwards
-	            this.video.currentTime -= increment
+	            this.video.currentTime -= increment;
 	        }
 	    },
 	
