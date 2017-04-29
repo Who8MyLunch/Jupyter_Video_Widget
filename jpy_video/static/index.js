@@ -128,11 +128,17 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	//-----------------------------------------------
 	
 	// Widget View renders the model to the DOM
-	
 	var TimeCodeView = widgets.HTMLView.extend({
+	    // https://codereview.stackexchange.com/questions/49524/updating-single-view-on-change-of-a-model-in-backbone
 	    render: function() {
-	        this.el.textContent = this.model.get('value');
 	        this.listenTo(this.model, 'change:timecode', this.timecode_changed);
+	
+	        TimeCodeView.__super__.render.apply(this);
+	
+	        this.timecode_changed();
+	        this.update();
+	
+	        return this;
 	    },
 	
 	    timecode_changed: function() {
@@ -143,7 +149,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        var h = Math.floor((t/3600));
 	        var m = Math.floor((t % 3600)/60);
 	        var s = Math.floor((t % 60));
-	        var f = Math.floor((t % 1)/time_base);
+	        var f = Math.round((t % 1)/time_base);
 	
 	        // Pretty timecode string
 	        var time_string = zero_pad_two_digits(h) + ':' +
@@ -151,23 +157,25 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	                          zero_pad_two_digits(s) + ':' +
 	                          zero_pad_two_digits(f);
 	
-	        var html = `<p style="font-family:  DejaVu Sans Mono, Consolas, Lucida Console, Monospace;'
-	                              font-variant: normal;
-	                              font-weight:  bold;
-	                              font-style:   normal;
-	                              margin-left:  2pt;
-	                              margin-right: 2pt;
-	                              font-size:    10pt;
-	                              line-height:  13pt;">
+	        var html = `<p style="font-family:   DejaVu Sans Mono, Consolas, Lucida Console, Monospace;'
+	                              font-variant:  normal;
+	                              font-weight:   bold;
+	                              font-style:    normal;
+	                              font-size:     11pt;
+	                              margin-left:   3pt;
+	                              margin-right:  3pt;
+	                              ">
 	                    ${time_string}</p>`;
+	                              // margin-top:    2pt;
+	                              // margin-bottom: 2pt;
+	                              // line-height:   13pt;">
 	
-	        this.el.textContent = html;
-	        // this.model.set('value', html);
-	        // this.touch();
+	        this.model.set('value', html);
+	        this.touch();
 	    },
 	});
 	
-	
+	//-----------------------------------------------
 	
 	var VideoView = widgets.DOMWidgetView.extend({
 	    render: function() {
@@ -237,6 +245,8 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        this.video.oncontextmenu = function(ev) {
 	            ev.preventDefault();
 	        };
+	
+	        return this;
 	    },
 	
 	    //------------------------------------------------------------------------------------------

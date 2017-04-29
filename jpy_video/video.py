@@ -28,7 +28,20 @@ class TimeCode(widgets.HTML):
     _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
 
     # Public information
-    time_code = traitlets.Float().tag(sync=True)
+    timecode = traitlets.Float().tag(sync=True)
+
+    def __init__(self):
+        """Create new widget instance
+        """
+        super().__init__()
+
+        self.layout.border = '1px solid grey'
+        self.layout.justify_content = 'center'
+        self.layout.align_items = 'center'
+        self.layout.align_self = 'center'
+        # self.layout.width = 'fit-content'
+        self.layout.height = '14pt'
+
 
 
 

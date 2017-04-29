@@ -36,6 +36,7 @@ A Jupyter widget that nmakes it easy to play videos (local and remote) via HTML5
 
 
 
+
 ## Prerequisites
 
 ```bash
@@ -94,14 +95,18 @@ jupyter nbextension enable  --py           --sys-prefix jpy_video
 
 ## After Making an Edit
 
-Change to the `js` folder and enter the following command:
+Change to the `js` folder (the one containing the file `package.json`) and enter the following command:
 
 ```bash
 npm install --save
 ```
 
 This prepares and packages all JavaScript components and installs them into the `static` folder up
-and over on the Python side. 
+and over on the Python side.   See the links below for helpful information:
+- https://docs.npmjs.com/cli/install
+- http://stackoverflow.com/questions/19578796/what-is-the-save-option-for-npm-install
+
+
 
 # Ideas for the Future
 
