@@ -283,10 +283,10 @@ class Server():
         if not path:
             path = os.path.curdir
 
-        self._path = None
-        self.verbose = verbose
         self._reset_properties()
+        self._path = None
         self.path = path
+        self.verbose = verbose
 
     def __del__(self):
         try:
