@@ -65,7 +65,7 @@ Note: I found this write-up at npmjs.com very helpful in understanding the requi
             - static/
             - version.py
             - video.py              Widget Python code
-            - server.py             Included http video file server with builtin support for byte range requests
+            - server.py             Includes http file server with support for byte range requests
             - namespace.py
         - js/                       All JavaScript code lives here
             - dist/
@@ -103,13 +103,3 @@ Note: I found this write-up at npmjs.com very helpful in understanding the requi
     - https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Video_and_audio_content
     - https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery
     - https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_manipulation
-
-
-
-
-# Ideas for the Future
-
-- file selection compound widget: https://gist.github.com/DrDub/6efba6e522302e43d055
-- http://mindtrove.info/4-ways-to-extend-jupyter-notebook/#nb-server-exts
-- http://jupyter-notebook.readthedocs.io/en/latest/extending/handlers.html
-
