@@ -1,35 +1,32 @@
-# Release
+# Release a new version of Jupyter_Video_Widget:
 
-## To release a new version of Jupyter_Video_Widget on PyPI:
+PyPi Instructions: https://packaging.python.org/distributing/#uploading-your-project-to-pypi
 
-Update version number in file version.py and remove 'dev'.  Commit changes, upload to PyPI, add tag.
+Twin command-line tool for registering and uploading packages: https://github.com/pypa/twine
+
+
+Commit code edits to GitHub after making all your awesome changes.  Update version
+number in the file version.py, making sure to also remove 'dev' descriptor.
 
 ```bash
 git add <any new stuff>
 git commit -a
-
-python setup.py sdist upload
-python setup.py bdist_wheel upload
-
-git tag -a X.X.X -m 'comment'
 ```
 
-Once the above is done its time to go back to developing the next great release.  Update current version
-number inside file version.py by adding 'dev' and increment minor number. Commit dev version and push new tags.
+Create source and binary distribution files.  Twine will handle registering the project the
+first time uploading a distribution for a new project.
+
+```bash
+python setup.py sdist bdist_wheel
+
+twine upload dist/*
+```
+
+
+Once the above is done its time to go back to developing the next great release.  Update current
+version number inside version.py by adding 'dev' and increment the minor number. Commit this change
+and go to work.
 
 ```bash
 git commit -a
-
-git push
-git push --tags
-```
-
-## To release a new version of jupyter_video_widget on NPM:
-
-Update version number in `js/src/package.json`. Clean working folders and publish:
-
-```bash
-git clean -fdx
-npm install
-npm publish
 ```

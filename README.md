@@ -44,7 +44,7 @@ jupyter nbextension enable  --py           --sys-prefix jpy_video
 
 ## After Making Changes to JavaScript Code
 
-Change to the `js` folder (the one containing the file `package.json`) and enter the following command:
+Change to the `js` folder (the one containing the file `package.json`) and type the command:
 
 ```bash
 npm install --save
@@ -85,18 +85,18 @@ Note: I found this write-up at npmjs.com very helpful in understanding the requi
 
 ## Reference Information
 
-- Jupyter widgets documentation
+- Jupyter widgets documentation:
     - [Jupyter widgets github](https://github.com/ipython/ipywidgets)
     - [Building a custom widget](https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Custom.html)
     - [Low-level widget tutorial](https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Low%20Level.html)
 
-- Helpful HTML5 articles
+- Helpful HTML5 articles:
     - [Good stuff about implementing custom video HTML5 player](https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/cross_browser_video_player)
     - [Video player styling](https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/Video_player_styling_basics)
     - [Media buffering and seeking, nice example displaying time ranges where video is loaded](https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/buffering_seeking_time_ranges)
     - [HTML5 media events](https://www.w3.org/2010/05/video/mediaevents.html)
 
-- More information about HTML5 and video/audio media
+- More information about HTML5 and video/audio media:
     - https://www.html5rocks.com/en/tutorials/video/basics/
     - https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
     - https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement

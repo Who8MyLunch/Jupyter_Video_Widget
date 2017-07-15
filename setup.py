@@ -25,7 +25,8 @@ log.info('$PATH=%s' % os.environ['PATH'])
 LONG_DESCRIPTION = 'A Jupyter widget for HTML5 video player'
 
 def js_prerelease(command, strict=False):
-    """decorator for building minified js/css prior to another command"""
+    """decorator for building minified js/css prior to another command
+    """
     class DecoratedCommand(command):
         def run(self):
             jsdeps = self.distribution.get_command_obj('jsdeps')
@@ -51,7 +52,8 @@ def js_prerelease(command, strict=False):
     return DecoratedCommand
 
 def update_package_data(distribution):
-    """update package_data to catch changes during setup"""
+    """update package_data to catch changes during setup
+    """
     build_py = distribution.get_command_obj('build_py')
     # distribution.package_data = find_package_data()
     # re-init build_py options which load package_data
@@ -146,7 +148,7 @@ setup_args = {
 
     'author': 'Pierre Villeneuve',
     'author_email': 'pierre.villeneuve@gmail.com',
-    'url': 'http://github.com/who8mylunch',
+    'url': 'https://github.com/Who8MyLunch/Jupyter_Video_Widget',
     'keywords': ['ipython', 'jupyter', 'widgets', 'video', 'html5'],
     'license': 'MIT',
     'platform': 'Jupyter',
@@ -160,6 +162,7 @@ setup_args = {
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 }
 

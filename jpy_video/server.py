@@ -13,10 +13,6 @@ browser all at once.
 https://github.com/danvk/RangeHTTPServer
 
 https://docs.python.org/3/library/http.server.html
-
-
-Consider something with asyncio framework
-https://github.com/aio-libs/aiohttp
 """
 
 import http.server
@@ -437,5 +433,5 @@ def main(path_serve):
 if __name__ == '__main__':
 
     # A simple example for testing and development
-    path = '/home/pierre/Videos'
+    path = '~/Videos'
     main(path_serve=path)
