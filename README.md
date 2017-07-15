@@ -60,29 +60,28 @@ and over on the Python side.   See the links below for more helpful information:
 
 Note: I found this write-up at npmjs.com very helpful in understanding the required folder layout: https://docs.npmjs.com/files/folders.
 
-- Jupyter_Video_Widget/
-    - jpy_video/                `*All Python code lives here*`
-        - static/
-        - version.py
-        - video.py              *Widget Python code*
-        - server.py             *Included http video file server with builtin support for byte range requests*
-        - namespace.py
-    - js/                       *All JavaScript code lives here*
-        - dist/
-        - node_modules/
-        - src/
-            - jupyter-video.js  *Widget javaScript code*
-            - embed.js          *Only edit to update exported module name (e.g. video.js)*
-            - index.js          *Only edit to update exported module name (e.g. video.js)*
-            - extension.js
-        - README.md
-        - package.json          *Double check author name, email address, github org., etc.*
-        - webpack.config.js     *Contains path to static JS folder on the Python side*
-    - setup.py
-    - setup.cfg
-    - MANIFEST.in               *Relative path to static folder under jpy_video*
-    - requirements.txt
-
+    - Jupyter_Video_Widget/
+        - jpy_video/                All Python code lives here
+            - static/
+            - version.py
+            - video.py              Widget Python code
+            - server.py             Included http video file server with builtin support for byte range requests
+            - namespace.py
+        - js/                       All JavaScript code lives here
+            - dist/
+            - node_modules/
+            - src/
+                - jupyter-video.js  Widget javaScript code
+                - embed.js          Only edit to update exported module name (e.g. video.js)
+                - index.js          Only edit to update exported module name (e.g. video.js)
+                - extension.js
+            - README.md
+            - package.json          Double check author name, email address, github org., etc.
+            - webpack.config.js     Contains path to static JS folder on the Python side
+        - setup.py
+        - setup.cfg
+        - MANIFEST.in               Relative path to static folder under jpy_video
+        - requirements.txt
 
 ## Reference Information
 
