@@ -7,7 +7,7 @@ This widget was initialized using this very handy Cookiecutter [template](https:
 
 ## Prerequisites
 
-Need to enable ipywidgets notebook extension if not already done.
+You'll first need to enable ipywidgets notebook extension if not already done.
 
 ```bash
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
@@ -21,13 +21,11 @@ jupyter nbextension enable --py --sys-prefix widgetsnbextension
 
 Use pip to install:
 
-```sh
+```bash
 pip install Jupyter-Video-Widget
 
 jupyter nbextension enable --py --sys-prefix jpy_video
 ```
-
-Modify above `nbextension` command as needed for your own configuration and/or environment.
 
 ## Developer Installation
 
@@ -63,7 +61,7 @@ and over on the Python side.   See the links below for more helpful information:
 Note: I found this write-up at npmjs.com very helpful in understanding the required folder layout: https://docs.npmjs.com/files/folders.
 
 - Jupyter_Video_Widget/
-    - jpy_video/                *All Python code lives here*
+    - jpy_video/                `*All Python code lives here*`
         - static/
         - version.py
         - video.py              *Widget Python code*
