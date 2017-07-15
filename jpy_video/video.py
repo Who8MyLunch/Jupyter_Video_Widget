@@ -45,7 +45,6 @@ class TimeCode(widgets.HTML):
 
 
 
-
 @widgets.register()
 class Video(widgets.DOMWidget):
     """HTML5 video player as a Jupyter widget

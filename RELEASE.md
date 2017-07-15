@@ -2,7 +2,7 @@
 
 ## To release a new version of Jupyter_Video_Widget on PyPI:
 
-Update _version.py (set release version, remove 'dev') and then:
+Update version number in file version.py and remove 'dev'.  Commit changes, upload to PyPI, add tag.
 
 ```bash
 git add <any new stuff>
@@ -14,7 +14,8 @@ python setup.py bdist_wheel upload
 git tag -a X.X.X -m 'comment'
 ```
 
-Update _version.py (add 'dev' and increment minor) and then:
+Once the above is done its time to go back to developing the next great release.  Update current version
+number inside file version.py by adding 'dev' and increment minor number. Commit dev version and push new tags.
 
 ```bash
 git commit -a
