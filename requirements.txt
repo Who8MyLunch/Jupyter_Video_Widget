@@ -1,5 +1,6 @@
 ipython
-ipywidgets
 jupyter
 notebook
+ipywidgets
 shortuuid
+ordered-namespace

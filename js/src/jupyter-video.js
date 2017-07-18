@@ -3,7 +3,7 @@ var _ = require('underscore');
 
 
 // https://remysharp.com/2010/07/21/throttling-function-calls
-// See updated version in comments
+// See updated version in above article's comments
 function throttle(fn, threshhold, scope) {
   // threshhold || (threshhold = 250);
   var last, deferTimer;

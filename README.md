@@ -7,7 +7,8 @@ This widget was initialized using this very handy Cookiecutter [template](https:
 
 ## Prerequisites
 
-You'll first need to enable ipywidgets notebook extension if not already done.
+You'll first need to enable ipywidgets notebook extension if not already done.  You can use the
+command `jupyter nbextension list` to see which (if any) notebook extensions are currently enabled.
 
 ```bash
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
@@ -29,8 +30,6 @@ jupyter nbextension enable --py --sys-prefix jpy_video
 
 ## Developer Installation
 
-Development installation requires npm.
-
 ```bash
 git clone git@github.com:Who8MyLunch/Jupyter_Video_Widget.git
 
@@ -42,23 +41,31 @@ jupyter nbextension enable  --py           --sys-prefix jpy_video
 ```
 
 
-## After Making Changes to JavaScript Code
+## Making Changes to JavaScript Code
 
-Change to the `js` folder (the one containing the file `package.json`) and type the command:
+Jupyter widget development uses [npm]([npm](https://docs.npmjs.com/getting-started/what-is-npm)
+(Node Package Manager) for handling all the scary JavaScript details. The source code for this
+project lives in the folder `js` and the npm package is defined by the file `js/package.json`.  The
+actual JavaScript source code for the video widget is contained entirely in the file `js/src/jupyter-video.js`.
+This is the only JavaScript file you should need edit when working on front-end parts of this project.
+
+After making changes to this JavaScript code it must be prepared and packaged into the `static`
+folder on the Python side of the project.  Do this by typing the following command from within
+the `js` folder:
 
 ```bash
-npm install --save
+npm install
 ```
 
-This prepares and packages all JavaScript components and installs them into the `static` folder up
-and over on the Python side.   See the links below for more helpful information:
+See the links below for more helpful information:
 - https://docs.npmjs.com/cli/install
 - http://stackoverflow.com/questions/19578796/what-is-the-save-option-for-npm-install
 
 
 ## File Layout
 
-Note: I found this write-up at npmjs.com very helpful in understanding the required folder layout: https://docs.npmjs.com/files/folders.
+Note: I found this write-up at npmjs.com very helpful in understanding the recommended folder
+layout: https://docs.npmjs.com/files/folders.
 
     - Jupyter_Video_Widget/
         - jpy_video/                All Python code lives here
@@ -82,6 +89,7 @@ Note: I found this write-up at npmjs.com very helpful in understanding the requi
         - setup.cfg
         - MANIFEST.in               Relative path to static folder under jpy_video
         - requirements.txt
+
 
 ## Reference Information
 

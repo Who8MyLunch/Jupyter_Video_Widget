@@ -8,7 +8,7 @@ import traitlets
 import shortuuid
 
 from ._version import __version__
-from .namespace import Struct
+from ordered_namespace import Struct
 from . import server
 
 

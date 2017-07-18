@@ -18,6 +18,7 @@ Authors:
 #-----------------------------------------------------------------------------
 # Imports
 #-----------------------------------------------------------------------------
+from collections import OrderedDict
 import re
 
 __all__ = ['Struct']
@@ -27,7 +28,7 @@ __all__ = ['Struct']
 #-----------------------------------------------------------------------------
 
 
-class Struct(dict):
+class Struct(OrderedDict):
     """A dict subclass with attribute style access.
 
     This dict subclass has a few extra features:
@@ -62,8 +63,8 @@ class Struct(dict):
         >>> sorted(s2.keys())
         ['a', 'b', 'c']
         """
+        super().__init__(*args, **kw)
         object.__setattr__(self, '_allownew', True)
-        dict.__init__(self, *args, **kw)
 
     def __setitem__(self, key, value):
         """Set an item with check for allownew.
@@ -85,9 +86,9 @@ class Struct(dict):
         this is not allowed
         """
         if not self._allownew and key not in self:
-            raise KeyError(
-                "can't create new attribute %s when allow_new_attr(False)" % key)
-        dict.__setitem__(self, key, value)
+            raise KeyError("can't create new attribute %s when allow_new_attr(False)" % key)
+
+        super().__setitem__(key, value)
 
     def __setattr__(self, key, value):
         """Set an attr with protection of class members.
@@ -116,9 +117,7 @@ class Struct(dict):
             # self._data.  But I only want keys in the class and in
             # self.__dict__
             if key in self.__dict__ or hasattr(Struct, key):
-                raise AttributeError(
-                    'attr %s is a protected member of class Struct.' % key
-                )
+                raise AttributeError('attr %s is a protected member of class Struct.' % key)
         try:
             self.__setitem__(key, value)
         except KeyError as e:
@@ -379,7 +378,7 @@ class Struct(dict):
         [('a', 20), ('b', 70)]
         """
 
-        data_dict = dict(__loc_data__,**kw)
+        data_dict = OrderedDict(__loc_data__,**kw)
 
         # policies for conflict resolution: two argument functions which return
         # the value that will go in the new struct
@@ -390,7 +389,8 @@ class Struct(dict):
         add_s    = lambda old,new: old + ' ' + new
 
         # default policy is to keep current keys when there's a conflict
-        conflict_solve = dict.fromkeys(self, preserve)
+        # conflict_solve = dict.fromkeys(self, preserve)
+        conflict_solve = super().fromkeys(preserve)
 
         # the conflict_solve dictionary is given by the user 'inverted': we
         # need a name-function mapping, it comes as a function -> names

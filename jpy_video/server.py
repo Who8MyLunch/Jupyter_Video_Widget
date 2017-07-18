@@ -1,7 +1,7 @@
 from __future__ import division, print_function, unicode_literals
 
 """
-Use this in the same way as Python's SimpleHTTPServer:
+Use this module in the same way as Python's SimpleHTTPServer:
 
   python -m RangeHTTPServer [port]
 
