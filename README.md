@@ -1,21 +1,22 @@
 # Jupyter Video Widget
 
-The goal of this project is to develop a custom Jupyter [widget](https://github.com/ipython/ipywidgets)
-making it easy to play videos (local and remote) via HTML5 video player embededed in a Jupyter Notebook.
-This widget was initialized using this very handy Cookiecutter [template](https://github.com/jupyter-widgets/widget-cookiecutter).
+The goal of this project is to develop a custom Jupyter [widget](https://github.com/ipython/ipywidgets) making it easy to play videos (local and remote) via HTML5 video player embededed in a Jupyter Notebook. This widget was initialized using this very handy Cookiecutter [template](https://github.com/jupyter-widgets/widget-cookiecutter).
 
+
+# Example
+
+pretty screen shot goes here.
+
+
+# Install
 
 ## Prerequisites
 
-You'll first need to enable ipywidgets notebook extension if not already done.  You can use the
-command `jupyter nbextension list` to see which (if any) notebook extensions are currently enabled.
+If not already enabled, you'll need to enable the ipywidgets notebook extension that installs with Jupyter.  You can use the command `jupyter nbextension list` to see which (if any) notebook extensions are currently enabled.  Enable it with following:
 
 ```bash
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
 ```
-
-## Example
-
 
 
 ## Standard Installation
@@ -43,15 +44,9 @@ jupyter nbextension enable  --py           --sys-prefix jpy_video
 
 ## Making Changes to JavaScript Code
 
-Jupyter widget development uses [npm]([npm](https://docs.npmjs.com/getting-started/what-is-npm)
-(Node Package Manager) for handling all the scary JavaScript details. The source code for this
-project lives in the folder `js` and the npm package is defined by the file `js/package.json`.  The
-actual JavaScript source code for the video widget is contained entirely in the file `js/src/jupyter-video.js`.
-This is the only JavaScript file you should need edit when working on front-end parts of this project.
+Jupyter widget development uses [npm]([npm](https://docs.npmjs.com/getting-started/what-is-npm) (Node Package Manager) for handling all the scary JavaScript details. The source code for this project lives in the folder `js` and the npm package is defined by the file `js/package.json`.  The actual JavaScript source code for the video widget is contained entirely in the file `js/src/jupyter-video.js`.  This is the only JavaScript file you should need edit when working on front-end parts of this project.
 
-After making changes to this JavaScript code it must be prepared and packaged into the `static`
-folder on the Python side of the project.  Do this by typing the following command from within
-the `js` folder:
+After making changes to this JavaScript code it must be prepared and packaged into the `static` folder on the Python side of the project.  Do this by typing the following command from within the `js` folder:
 
 ```bash
 npm install
@@ -64,8 +59,7 @@ See the links below for more helpful information:
 
 ## File Layout
 
-Note: I found this write-up at npmjs.com very helpful in understanding the recommended folder
-layout: https://docs.npmjs.com/files/folders.
+Note: I found this write-up at npmjs.com very helpful in understanding the recommended folder layout: https://docs.npmjs.com/files/folders.
 
     - Jupyter_Video_Widget/
         - jpy_video/                All Python code lives here
