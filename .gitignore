@@ -105,8 +105,6 @@ ENV/
 
 ## Node
 
-package-lock.json
-
 # Logs
 logs
 *.log

@@ -17,6 +17,8 @@ Create source and binary distribution files.  Twine will handle registering the 
 first time uploading a distribution for a new project.
 
 ```bash
+rm -rf dist
+
 python setup.py sdist bdist_wheel
 
 twine upload dist/*

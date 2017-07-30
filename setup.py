@@ -22,8 +22,6 @@ log.set_verbosity(log.DEBUG)
 log.info('setup.py entered')
 log.info('$PATH=%s' % os.environ['PATH'])
 
-LONG_DESCRIPTION = 'A Jupyter widget for HTML5 video player'
-
 def js_prerelease(command, strict=False):
     """decorator for building minified js/css prior to another command
     """
@@ -118,16 +116,16 @@ with open(os.path.join(here, 'jpy_video', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = {
-    'name': 'Jupyter_Video_Widget',
+    # 'name': 'Jupyter_Video_Widget',
     'version': version_ns['__version__'],
-    'description': 'A Jupyter HTML5 Video Player Widget',
-    'long_description': LONG_DESCRIPTION,
+    # 'description': 'A Jupyter HTML5 Video Player Widget',
+    # 'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
-        ('share/jupyter/nbextensions/jupyter-video', [
-            'jupyter_video/static/extension.js',
-            'jupyter_video/static/index.js',
-            'jupyter_video/static/index.js.map',
+        ('share/jupyter/nbextensions/jpy_video', [
+            'jpy_video/static/extension.js',
+            'jpy_video/static/index.js',
+            'jpy_video/static/index.js.map',
         ]),
     ],
     'install_requires': [
@@ -146,12 +144,12 @@ setup_args = {
         'jsdeps': NPM,
     },
 
-    'author': 'Pierre Villeneuve',
-    'author_email': 'pierre.villeneuve@gmail.com',
-    'url': 'https://github.com/Who8MyLunch/Jupyter_Video_Widget',
-    'keywords': ['ipython', 'jupyter', 'widgets', 'video', 'html5'],
-    'license': 'MIT',
-    'platform': 'Jupyter',
+    # 'author': 'Pierre Villeneuve',
+    # 'author_email': 'pierre.villeneuve@gmail.com',
+    # 'url': 'https://github.com/Who8MyLunch/Jupyter_Video_Widget',
+    # 'keywords': ['ipython', 'jupyter', 'widgets', 'video', 'html5'],
+    # 'license': 'MIT',
+    # 'platform': 'Jupyter',
     'classifiers': [
         'Development Status :: 4 - Beta',
         'Framework :: Jupyter',

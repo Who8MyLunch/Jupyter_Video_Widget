@@ -78,7 +78,7 @@ var TimeCodeView = widgets.HTMLView.extend({
     },
 
     timecode_changed: function() {
-        var time_base = 1/30;
+        var time_base = this.model.get('timebase');
 
         var t = this.model.get('timecode');  //  current video time in seconds
 
@@ -100,10 +100,10 @@ var TimeCodeView = widgets.HTMLView.extend({
                               font-size:     11pt;
                               margin-left:   3pt;
                               margin-right:  3pt;
+                              margin-top:    2pt;
+                              margin-bottom: 2pt;
                               ">
                     ${time_string}</p>`;
-                              // margin-top:    2pt;
-                              // margin-bottom: 2pt;
                               // line-height:   13pt;">
 
         this.model.set('value', html);
@@ -155,9 +155,7 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.video.addEventListener('play',  this.handle_play.bind(this),  false);
         this.video.addEventListener('pause', this.handle_pause.bind(this), false);
 
-        // Higher-frequency time updates
-
-        // Various mouse event handlers
+        // Define throttled event handlers for mouse wheel and mouse click
         var dt = 10;  // miliseconds
         var throttled_mouse_wheel = throttle(this.handle_mouse_wheel, dt, this);
         this.video.addEventListener('wheel', throttled_mouse_wheel);
@@ -172,12 +170,12 @@ var VideoView = widgets.DOMWidgetView.extend({
 
         //-------------------------------------------------
         // Minor tweaks
-        // Prevent page from scrolling with mouse wheel when hovering over video
+        // Prevent page from scrolling with mouse wheel when hovering over video element
         this.video.onwheel = function(ev) {
             ev.preventDefault();
         };
 
-        // Prevent context menu popup from right-click on canvas
+        // Prevent context menu popup from right-click on video element
         this.video.oncontextmenu = function(ev) {
             ev.preventDefault();
         };
@@ -191,6 +189,8 @@ var VideoView = widgets.DOMWidgetView.extend({
     // model components.
     invoke_method: function() {
         // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+        // stamp is a timestamp generated at back end.  Its used here to guarantee a unique data
+        // Backbone event.
         var parts = this.model.get('_method');
         var name = parts[0];
         var stamp = parts[1];
@@ -269,8 +269,9 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.model.set('current_time', this.video['currentTime']);
         this.touch();
 
+        var delta_time_fast = 100;   // milliseconds
         if (this.enable_fast_time_update) {
-            setTimeout(this.fast_time_update.bind(this), 100);
+            setTimeout(this.fast_time_update.bind(this), delta_time_fast);
         }
     },
 
@@ -280,7 +281,7 @@ var VideoView = widgets.DOMWidgetView.extend({
         // events, and responding to them will only cause hard-to-debug timming trouble.
         this.stopListening(this.model, 'change:current_time');
 
-        // Emit time updates at faster rate
+        // Emit time updates in background at faster rate
         this.enable_fast_time_update = true;
         this.fast_time_update();
     },
@@ -304,7 +305,7 @@ var VideoView = widgets.DOMWidgetView.extend({
     // },
 
     handle_mouse_wheel: function(ev) {
-        // scrubbing takes over standard playback.
+        // Scrubbing takes over from standard playback.
         this.video.pause();
 
         // Increment size
@@ -315,8 +316,8 @@ var VideoView = widgets.DOMWidgetView.extend({
             // one second
             increment = 1;
         } else {
-            // one frame (1/30)
-            increment = 1/30;
+            // one frame, e.g. 1/30 or 1/60
+            increment = this.model.get('timebase');
         }
 
         if (ev.deltaY > 0) {
