@@ -122,7 +122,7 @@ setup_args = {
     # 'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
-        ('share/jupyter/nbextensions/jpy_video', [
+        ('share/jupyter/nbextensions/jupyter-video', [
             'jpy_video/static/extension.js',
             'jpy_video/static/index.js',
             'jpy_video/static/index.js.map',

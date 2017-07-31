@@ -62,12 +62,13 @@ Note: I found this write-up at npmjs.com very helpful in understanding the recom
 
     - Jupyter_Video_Widget/
         - jpy_video/                All Python code lives here
-            - static/
+            - static/               Prepared and packaged JS code ends up here
             - version.py
             - video.py              Widget Python code
             - server.py             Includes http file server with support for byte range requests
-            - namespace.py
-        - js/                       All JavaScript code lives here
+            - compound.py
+            - monotext_widget.py
+        - js/                       All original JavaScript code lives here
             - dist/
             - node_modules/
             - src/
@@ -80,7 +81,7 @@ Note: I found this write-up at npmjs.com very helpful in understanding the recom
             - webpack.config.js     Contains path to static JS folder on the Python side
         - setup.py
         - setup.cfg
-        - MANIFEST.in               Relative path to static folder under jpy_video
+        - MANIFEST.in               Contains relative path to static folder under jpy_video
         - requirements.txt
 
 

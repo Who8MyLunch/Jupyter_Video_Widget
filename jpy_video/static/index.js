@@ -149,12 +149,13 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	        var h = Math.floor((t/3600));
 	        var m = Math.floor((t % 3600)/60);
 	        var s = Math.floor((t % 60));
-	        var f = Math.round((t % 1)/time_base);
+	        var f = Math.floor((t % 1)/time_base);
+	        // var f = Math.round((t % 1)/time_base);
 	
 	        // Pretty timecode string
 	        var time_string = zero_pad_two_digits(h) + ':' +
 	                          zero_pad_two_digits(m) + ':' +
-	                          zero_pad_two_digits(s) + ':' +
+	                          zero_pad_two_digits(s) + ';' +
 	                          zero_pad_two_digits(f);
 	
 	        var html = `<p style="font-family:   DejaVu Sans Mono, Consolas, Lucida Console, Monospace;'
@@ -164,7 +165,7 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 	                              font-size:     11pt;
 	                              margin-left:   3pt;
 	                              margin-right:  3pt;
-	                              margin-top:    2pt;
+	                              margin-top:    4pt;
 	                              margin-bottom: 2pt;
 	                              ">
 	                    ${time_string}</p>`;

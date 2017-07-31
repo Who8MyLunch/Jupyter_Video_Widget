@@ -62,6 +62,8 @@ Available Jupyter widgets:
 
 class VideoPlayer(ipywidgets.VBox):
     """Compound video player widget
+
+    Click the video display to start/stop playback.
     """
     def __init__(self, source, timebase=1/30):
         """Define a new player instance for supplied source
@@ -73,7 +75,7 @@ class VideoPlayer(ipywidgets.VBox):
 
         self.wid_video.layout.width = '100%'  # scale to fit inside parent element
         self.wid_video.layout.align_self = 'center'
-        self.wid_video.layout.border = '2px solid grey'
+        self.wid_video.layout.border = '1px solid grey'
 
         self.wid_timecode = TimeCode(timebase=timebase)
 
@@ -83,6 +85,7 @@ class VideoPlayer(ipywidgets.VBox):
                                                  continuous_update=True, orientation='horizontal',
                                                  readout=False, # readout_format='.2f',
                                                  slider_color='blue')
+        self.wid_slider.layout.width = '50%'
 
         self.wid_label = MonoText(text='source: {}'.format(source))
 
@@ -93,14 +96,14 @@ class VideoPlayer(ipywidgets.VBox):
 
         # Assemble
         self.wid_controls = ipywidgets.HBox(children=[self.wid_timecode, self.wid_slider])
-        self.children = [self.wid_video, self.wid_label, self.wid_controls]
+        self.children = [self.wid_video, self.wid_controls, self.wid_label]
 
         # Link widgets at front end
         ipywidgets.jslink((self.wid_video, 'current_time'), (self.wid_slider, 'value'))
         ipywidgets.jsdlink((self.wid_video, 'current_time'), (self.wid_timecode, 'timecode'))
 
     #--------------------------------------------
-        # wid_video.on_event(handle_any)
+    # wid_video.on_event(handle_any)
     def _handle_displayed(self, *args, **kwargs):
         """Do stuff that can only be done after widget is displayed
         """
@@ -111,30 +114,22 @@ class VideoPlayer(ipywidgets.VBox):
         """
         self.wid_slider.max = properties.duration
 
-
     def _handle_loaded_metadata(self, wid, properties):
         """Function to be called when sufficient video metadata has been loaded at the frontend
         """
-        pass
-
+        width = properties.videoWidth
+        self.layout.width = '{}px'.format(width+ 5)
+        self.wid_video.layout.width = '{}px'.format(width)
+        self.layout.align_self = 'center'
 
     def display(self):
         IPython.display.display(self)
 
+    @property
+    def properties(self):
+        return self.wid_video.properties
 
 
-
-
-
-
-
-# ipywidgets.jslink((wid, 'current_time'), (wid_slider, 'value'))
-
-# wid_slider = ipywidgets.FloatSlider(description='Test:', min=0, max=10.0, step=1/30,
-#                                     continuous_update=True, orientation='horizontal', readout=True,
-#                                     readout_format='.2f', slider_color='white')
-
-# ipywidgets.jslink((wid, 'current_time'), (wid_slider, 'value'))
-
-
-
+#------------------------------------------------
+if __name__ == '__main__':
+    pass
