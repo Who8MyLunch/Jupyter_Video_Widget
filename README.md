@@ -1,12 +1,11 @@
 # Jupyter Video Widget
 
-The goal of this project is to develop a custom Jupyter [widget](https://github.com/ipython/ipywidgets) making it easy to play videos (local and remote) via HTML5 video player embededed in a Jupyter Notebook. This widget was initialized using this very handy Cookiecutter [template](https://github.com/jupyter-widgets/widget-cookiecutter).
+The goal of this project is to develop a custom Jupyter [widget](https://github.com/ipython/ipywidgets) making it easy to play videos (local and remote) via HTML5 video player embededed in a Jupyter Notebook. This widget project was initialized using the very handy Cookiecutter [template](https://github.com/jupyter-widgets/widget-cookiecutter).
 
 
 # Example
 
-pretty screen shot goes here.
-
+![example](example.png)
 
 # Install
 
