@@ -7,8 +7,7 @@ if (window.require) {
     window.require.config({
         map: {
             "*" : {
-                "jupyter-video":      "nbextensions/jupyter-video/index",
-                "jupyter-js-widgets": "nbextensions/jupyter-js-widgets/extension"
+                "jupyter-video": "nbextensions/jupyter-video/index",
             }
         }
     });

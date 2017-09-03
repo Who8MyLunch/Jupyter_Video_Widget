@@ -1,3 +1,4 @@
+
 var version = require('./package.json').version;
 
 // Custom webpack loaders are generally the same for all webpack bundles, hence
@@ -39,7 +40,8 @@ module.exports = [
         module: {
             loaders: loaders
         },
-        externals: ['jupyter-js-widgets']
+        externals: ['@jupyter-widgets/base',
+                    '@jupyter-widgets/controls']
     },
 
     {// Embeddable jupyter_video_widget bundle
@@ -64,6 +66,7 @@ module.exports = [
         module: {
             loaders: loaders
         },
-        externals: ['jupyter-js-widgets']
+        externals: ['@jupyter-widgets/base',
+                    '@jupyter-widgets/controls']
     }
 ];

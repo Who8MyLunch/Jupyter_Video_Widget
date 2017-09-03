@@ -7,6 +7,7 @@ The goal of this project is to develop a custom Jupyter [widget](https://github.
 
 ![example](example.png)
 
+
 # Install
 
 ## Prerequisites
@@ -41,7 +42,7 @@ jupyter nbextension enable  --py           --sys-prefix jpy_video
 ```
 
 
-## Making Changes to JavaScript Code
+# Making Changes to JavaScript Code
 
 Jupyter widget development uses [npm]([npm](https://docs.npmjs.com/getting-started/what-is-npm) (Node Package Manager) for handling all the scary JavaScript details. The source code for this project lives in the folder `js` and the npm package is defined by the file `js/package.json`.  The actual JavaScript source code for the video widget is contained entirely in the file `js/src/jupyter-video.js`.  This is the only JavaScript file you should need edit when working on front-end parts of this project.
 
@@ -56,7 +57,7 @@ See the links below for more helpful information:
 - http://stackoverflow.com/questions/19578796/what-is-the-save-option-for-npm-install
 
 
-## File Layout
+# File Layout
 
 Note: I found this write-up at npmjs.com very helpful in understanding the recommended folder layout: https://docs.npmjs.com/files/folders.
 

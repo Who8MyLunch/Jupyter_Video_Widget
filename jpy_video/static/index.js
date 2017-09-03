@@ -1,4 +1,4 @@
-define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return /******/ (function(modules) { // webpackBootstrap
+define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -1976,9 +1976,9 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 
 	module.exports = {
 		"name": "jupyter-video",
-		"version": "0.1.0",
-		"description": "HMTL5 video player widget",
-		"author": "Pierre Villeneuve",
+		"version": "0.2.0",
+		"description": "HTML5 video player widget",
+		"author": "Pierre V. Villeneuve",
 		"license": "MIT",
 		"main": "src/index.js",
 		"repository": {
@@ -2002,7 +2002,8 @@ define(["jupyter-js-widgets"], function(__WEBPACK_EXTERNAL_MODULE_2__) { return 
 			"webpack": "^1.12.14"
 		},
 		"dependencies": {
-			"jupyter-js-widgets": "^2.1.4",
+			"@jupyter-widgets/base": "^1.0.1",
+			"@jupyter-widgets/controls": "^1.0.1",
 			"underscore": "^1.8.3"
 		}
 	};
