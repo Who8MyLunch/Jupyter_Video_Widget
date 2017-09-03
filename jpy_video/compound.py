@@ -73,7 +73,7 @@ class VideoPlayer(ipywidgets.VBox):
         # Build the parts
         self.wid_video = Video(source, timebase=timebase)
 
-        self.wid_video.layout.width = '100%'  # scale to fit inside parent element
+        # self.wid_video.layout.width = '100%'  # scale to fit inside parent element
         self.wid_video.layout.align_self = 'center'
         self.wid_video.layout.border = '1px solid grey'
 
@@ -83,7 +83,7 @@ class VideoPlayer(ipywidgets.VBox):
 
         self.wid_slider = ipywidgets.FloatSlider(min=0, max=60, step=timebase,
                                                  continuous_update=True, orientation='horizontal',
-                                                 readout=False, # readout_format='.2f',
+                                                 readout=False,
                                                  slider_color='blue')
         self.wid_slider.layout.width = '50%'
 

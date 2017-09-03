@@ -94,18 +94,17 @@ var TimeCodeView = widgets.HTMLView.extend({
                           zero_pad_two_digits(s) + ';' +
                           zero_pad_two_digits(f);
 
-        var html = `<p style="font-family:   DejaVu Sans Mono, Consolas, Lucida Console, Monospace;'
+        var html = `<p style="font-family:   DejaVu Sans Mono, Consolas, Monospace;'
                               font-variant:  normal;
                               font-weight:   bold;
                               font-style:    normal;
-                              font-size:     11pt;
                               margin-left:   3pt;
                               margin-right:  3pt;
-                              margin-top:    4pt;
-                              margin-bottom: 2pt;
-                              ">
-                    ${time_string}</p>`;
-                              // line-height:   13pt;">
+                              margin-top:    3pt;
+                              margin-bottom: 3pt;
+                              font-size:     11pt;
+                              line-height:   13pt;
+                              ">${time_string}</p>`;
 
         this.model.set('value', html);
         this.touch();

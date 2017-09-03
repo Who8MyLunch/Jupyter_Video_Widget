@@ -42,8 +42,8 @@ class TimeCode(ipywidgets.HTML):
         self.layout.justify_content = 'center'
         self.layout.align_items = 'center'
         self.layout.align_self = 'center'
-        # self.layout.width = 'fit-content'
-        self.layout.height = '14pt'
+        self.layout.width = 'fit-content'
+        # self.layout.height = '14pt'
 
 
 
