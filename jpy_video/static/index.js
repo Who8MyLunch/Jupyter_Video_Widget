@@ -202,22 +202,22 @@ define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { retu
 	        // Video element event handlers
 	        // frontend --> backend
 	        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
-	        this.video.addEventListener('durationchange', this.handle_event.bind(this), false);
-	        this.video.addEventListener('ended',          this.handle_event.bind(this), false);
-	        this.video.addEventListener('loadedmetadata', this.handle_event.bind(this), false);
-	        this.video.addEventListener('pause',          this.handle_event.bind(this), false);
-	        this.video.addEventListener('play',           this.handle_event.bind(this), false);
-	        this.video.addEventListener('playing',        this.handle_event.bind(this), false);
-	        this.video.addEventListener('ratechange',     this.handle_event.bind(this), false);
-	        this.video.addEventListener('seeked',         this.handle_event.bind(this), false);
-	        this.video.addEventListener('seeking',        this.handle_event.bind(this), false);
-	        this.video.addEventListener('timeupdate',     this.handle_event.bind(this), false);
-	        this.video.addEventListener('volumechange',   this.handle_event.bind(this), false);
+	        this.video.addEventListener('durationchange', this.handle_event.bind(this));
+	        this.video.addEventListener('ended',          this.handle_event.bind(this));
+	        this.video.addEventListener('loadedmetadata', this.handle_event.bind(this));
+	        this.video.addEventListener('pause',          this.handle_event.bind(this));
+	        this.video.addEventListener('play',           this.handle_event.bind(this));
+	        this.video.addEventListener('playing',        this.handle_event.bind(this));
+	        this.video.addEventListener('ratechange',     this.handle_event.bind(this));
+	        this.video.addEventListener('seeked',         this.handle_event.bind(this));
+	        this.video.addEventListener('seeking',        this.handle_event.bind(this));
+	        this.video.addEventListener('timeupdate',     this.handle_event.bind(this));
+	        this.video.addEventListener('volumechange',   this.handle_event.bind(this));
 	
 	        // Special handling for play and pause events
 	        this.enable_fast_time_update = false
-	        this.video.addEventListener('play',  this.handle_play.bind(this),  false);
-	        this.video.addEventListener('pause', this.handle_pause.bind(this), false);
+	        this.video.addEventListener('play',  this.handle_play.bind(this));
+	        this.video.addEventListener('pause', this.handle_pause.bind(this));
 	
 	        // Define throttled event handlers for mouse wheel and mouse click
 	        var dt = 10;  // miliseconds
@@ -227,10 +227,21 @@ define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { retu
 	        var throttled_mouse_click = throttle(this.handle_mouse_click, dt, this);
 	        this.video.addEventListener('click', throttled_mouse_click);
 	
-	        // Keyboard events, enabled by setting tabindex attribute at start of this section
-	        // var throttled_keypress = throttle(this.handle_keypress, 50, this);
-	        // this.video.addEventListener('keypress', throttled_keypress);
-	        // didn't seem to work as expcted.....
+	        // Handle keyboard event via containing div element.
+	        this.video.onloadedmetadata = function(ev) {
+	            // Parent element only knowable after DOM is rendered
+	            var container = ev.target.closest('div');
+	            container.tabIndex = 0
+	
+	            function div_focus() {
+	                container.focus();
+	            };
+	            container.addEventListener('mouseover', div_focus);
+	            container.addEventListener('keypress', this.handle_keypress);
+	            container.addEventListener('keydown', this.handle_keypress);
+	
+	            console.log(container);
+	        }.bind(this);
 	
 	        //-------------------------------------------------
 	        // Minor tweaks
@@ -341,8 +352,8 @@ define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { retu
 	
 	    handle_play: function(ev) {
 	        // console.log(ev);
-	        // Don't respond to current_time events while playing. The video itself the source of those
-	        // events, and responding to them will only cause hard-to-debug timming trouble.
+	        // Don't respond to current_time events while playing. The video itself is the source of
+	        // those events, and responding to them will only cause hard-to-debug timming trouble.
 	        this.stopListening(this.model, 'change:current_time');
 	
 	        // Emit time updates in background at faster rate
@@ -364,9 +375,16 @@ define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { retu
 	    //     this.touch();  // Must call this after any frontend modifications to Model data.
 	    // },
 	
-	    // handle_keypress: function(ev) {
-	    //     console.log(ev);
-	    // },
+	    handle_keypress: function(ev) {
+	        // 'altKey'
+	        // 'metaKey'
+	        // 'ctrlKey'
+	        ev.preventDefault();
+	        ev.stopImmediatePropagation();
+	        ev.stopPropagation();
+	        console.log(ev.key, ev.type);
+	
+	    },
 	
 	    handle_mouse_wheel: function(ev) {
 	        // Scrubbing takes over from standard playback.

@@ -81,11 +81,11 @@ class VideoPlayer(ipywidgets.VBox):
 
         # wid_button = ipywidgets.Button(icon='play')  # http://fontawesome.io/icon/pause/
 
-        self.wid_slider = ipywidgets.FloatSlider(min=0, max=60, step=timebase,
-                                                 continuous_update=True, orientation='horizontal',
-                                                 readout=False,
-                                                 slider_color='blue')
-        self.wid_slider.layout.width = '50%'
+        # self.wid_slider = ipywidgets.FloatSlider(min=0, max=60, step=timebase,
+        #                                          continuous_update=True, orientation='horizontal',
+        #                                          readout=False,
+        #                                          slider_color='blue')
+        # self.wid_slider.layout.width = '50%'
 
         self.wid_label = MonoText(text='source: {}'.format(source))
 
@@ -95,11 +95,12 @@ class VideoPlayer(ipywidgets.VBox):
         self.wid_video.on_event(self._handle_duration_change, 'durationchange')
 
         # Assemble
-        self.wid_controls = ipywidgets.HBox(children=[self.wid_timecode, self.wid_slider])
-        self.children = [self.wid_video, self.wid_controls, self.wid_label]
+        # self.wid_controls = ipywidgets.HBox(children=[self.wid_timecode, self.wid_slider])
+        self.wid_controls = ipywidgets.HBox(children=[self.wid_timecode, self.wid_label])
+        self.children = [self.wid_video, self.wid_controls]
 
         # Link widgets at front end
-        ipywidgets.jslink((self.wid_video, 'current_time'), (self.wid_slider, 'value'))
+        # ipywidgets.jslink((self.wid_video, 'current_time'), (self.wid_slider, 'value'))
         ipywidgets.jsdlink((self.wid_video, 'current_time'), (self.wid_timecode, 'timecode'))
 
     #--------------------------------------------
@@ -107,12 +108,14 @@ class VideoPlayer(ipywidgets.VBox):
     def _handle_displayed(self, *args, **kwargs):
         """Do stuff that can only be done after widget is displayed
         """
-        self.wid_video.set_property('controls', False)
+        pass
+        # self.wid_video.set_property('controls', False)
 
     def _handle_duration_change(self, wid, properties):
         """Update anything that depends on video duration
         """
-        self.wid_slider.max = properties.duration
+        pass
+        # self.wid_slider.max = properties.duration
 
     def _handle_loaded_metadata(self, wid, properties):
         """Function to be called when sufficient video metadata has been loaded at the frontend

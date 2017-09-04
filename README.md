@@ -29,6 +29,7 @@ pip install Jupyter-Video-Widget
 jupyter nbextension enable --py --sys-prefix jpy_video
 ```
 
+
 ## Developer Installation
 
 ```bash
