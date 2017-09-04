@@ -64,6 +64,7 @@ class Video(ipywidgets.DOMWidget):
     _property = traitlets.List().tag(sync=True)
     _play_pause = traitlets.Bool(False).tag(sync=True)
     _event = traitlets.Dict().tag(sync=True)
+    _enable_keyboard = traitlets.Bool(True).tag(sync=True)
 
     # Public information
     src = traitlets.Unicode('').tag(sync=True)
@@ -133,7 +134,7 @@ class Video(ipywidgets.DOMWidget):
         else:
             self.server.path = path_served
 
-        # Random version string to avoid browser cacheing issues
+        # Random version string to avoid browser caching issues
         version = '?v={}'.format(shortuuid.uuid())
 
         # Set local file URL for use by internal http server

@@ -112,6 +112,7 @@ var TimeCodeView = widgets.HTMLView.extend({
 });
 
 //-----------------------------------------------
+//-----------------------------------------------
 
 var VideoView = widgets.DOMWidgetView.extend({
     render: function() {
@@ -163,24 +164,24 @@ var VideoView = widgets.DOMWidgetView.extend({
         var throttled_mouse_click = throttle(this.handle_mouse_click, dt, this);
         this.video.addEventListener('click', throttled_mouse_click);
 
+        //-------------------------------------------------
         // Handle keyboard event via containing div element.
         this.video.onloadedmetadata = function(ev) {
             // Parent element only knowable after DOM is rendered
-            var container = ev.target.closest('div');
+            var container = ev.target.closest('div.output_area');
             container.tabIndex = 0
 
             function div_focus() {
-                container.focus();
-            };
-            container.addEventListener('mouseover', div_focus);
-            // container.addEventListener('keypress', this.handle_keypress);
-            container.addEventListener('keydown', this.handle_keypress);
+                if (this.model.get('_enable_keyboard')) {
+                    container.focus();
+                };
+            }
 
-            console.log(container);
+            container.addEventListener('mouseover', div_focus.bind(this));
+            container.addEventListener('keydown', this.handle_keypress.bind(this));
         }.bind(this);
 
         //-------------------------------------------------
-        // Minor tweaks
         // Prevent page from scrolling with mouse wheel when hovering over video element
         this.video.onwheel = function(ev) {
             ev.preventDefault();
@@ -194,6 +195,7 @@ var VideoView = widgets.DOMWidgetView.extend({
         return this;
     },
 
+    //------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------
     // Functions defined below generally are called in response to changes in the backbone model.
     // Typical outcome is to make changes to some front-end components, or to make changes to other
@@ -228,8 +230,6 @@ var VideoView = widgets.DOMWidgetView.extend({
 
     current_time_changed: function() {
         // HTML5 video element responds to backbone model changes.
-        // if (this.video.paused) {  // should no longer need this if test...
-            // Only respond if not currently playing.
         this.video['currentTime'] = this.model.get('current_time');
         // }
     },
@@ -254,6 +254,26 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.touch();
     },
 
+    jump_frames: function(num_frames) {
+        // Jump fractional number of frames, positive or negative
+        var dt_frame = this.model.get('timebase');
+
+        this.jump_seconds(num_frames*dt_frame);
+    },
+
+    jump_seconds: function(dt_seconds) {
+        // Jump fractional number of seconds, positive or negative
+        if (!this.video.paused) {
+            this.video.pause();
+        }
+        this.video.currentTime += dt_seconds;
+
+        // if (paused) {
+        //     this.video.play();
+        // }
+    },
+
+    //-------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------
     // The various handle_<something> functions are written to respond to front-end
     // JavaScript-generated events.  The usual outcome is either changing a parameter in the
@@ -305,45 +325,53 @@ var VideoView = widgets.DOMWidgetView.extend({
         this.enable_fast_time_update = false;
     },
 
-    // handle_currentTime: function(ev) {
-    //     var field = 'currentTime';
-    //     this.model.set(field, ev.target[field]);
-    //     this.touch();  // Must call this after any frontend modifications to Model data.
-    // },
-
     handle_keypress: function(ev) {
-        // 'altKey'
-        // 'metaKey'
-        // 'ctrlKey'
-        ev.preventDefault();
-        ev.stopImmediatePropagation();
-        ev.stopPropagation();
-        console.log(ev.key, ev.type);
+        if (this.model.get('_enable_keyboard')) {
+            // console.log(ev.key)
 
+            // 'altKey'
+            // 'metaKey'
+            // 'ctrlKey'
+            ev.stopImmediatePropagation();
+            ev.stopPropagation();
+            ev.preventDefault();
+
+            if (ev.key == ' ') {
+                // space bar toggle play/pause
+                this.play_pause_changed();
+            } else if (ev.key == 'ArrowLeft') {
+                if (ev.ctrlKey) {
+                    this.jump_seconds(-1);
+                } else {
+                    this.jump_frames(-1);
+                }
+            } else if (ev.key == 'ArrowRight') {
+                if (ev.ctrlKey) {
+                    this.jump_seconds(1);
+                } else {
+                    this.jump_frames(1);
+                }
+            }
+        }
     },
 
     handle_mouse_wheel: function(ev) {
-        // Scrubbing takes over from standard playback.
-        this.video.pause();
-
-        // Increment size
-        // if ev.altKey
-        // if ev.shiftKey
-        var increment;  // seconds
-        if (ev.ctrlKey) {
-            // one second
-            increment = 1;
+        var increment;
+        if (ev.deltaY < 0) {
+            // Forwards
+            increment = 1
         } else {
-            // one frame, e.g. 1/30 or 1/60
-            increment = this.model.get('timebase');
+            // Backwards
+            increment = -1
         }
 
-        if (ev.deltaY > 0) {
-            // Scrub forwards
-            this.video.currentTime += increment;
+        if (ev.ctrlKey) {
+            // ctrl --> skip one second
+            this.jump_seconds(increment);
         } else {
-            // Scrub backwards
-            this.video.currentTime -= increment;
+            // skip a single frame
+            // e.g. 1/30 or 1/60 sec
+            this.jump_frames(increment);
         }
     },
 
