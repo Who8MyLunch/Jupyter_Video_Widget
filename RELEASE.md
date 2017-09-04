@@ -14,7 +14,7 @@ git commit -a
 ```
 
 Create source and binary distribution files.  Twine will handle registering the project the
-first time uploading a distribution for a new project.
+first time uploading a distribution for a new project.  Install twine via pip if necessary.
 
 ```bash
 rm -rf dist
