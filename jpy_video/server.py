@@ -273,15 +273,22 @@ class RangeRequestHandler(http.server.SimpleHTTPRequestHandler):
 class Server():
     """Handy wrapper for my http file server.
     """
-    def __init__(self, path='.', verbose=False):
+    def __init__(self, path='.', host='localhost', port=0, verbose=False):
         """Make a new server instance, choosing a port at random from those available.
+
+           Default address parameters:
+               host = 'localhost'
+               port = 0   # 0 means system will pick a port number at random from those available
         """
         if not path:
             path = os.path.curdir
 
+
         self._reset_properties()
         self._path = None
         self.path = path
+        self.host = host
+        self.port = port
         self.verbose = verbose
 
     def __del__(self):
@@ -336,9 +343,7 @@ class Server():
     def start(self):
         """Start server running in background thread.
         """
-        host = 'localhost'
-        port = 0   # 0 means system will pick a port number at random from those available
-        address = host, port
+        address = self.host, self.port
         RequestHandler = RangeRequestHandler
         RequestHandler.verbose = self.verbose
         self._httpd = PathHTTPServer(self.path, address, RequestHandler)
