@@ -112,6 +112,11 @@ class Video(ipywidgets.DOMWidget):
 
     @filename.setter
     def filename(self, fname):
+        self.set_filename(fname)
+
+    def set_filename(self, fname, host='localhost', port=0):
+        """Set filename for local video
+        """
         if not fname:
             # Supplied filename is None, '', or similar.
             # Set filename to None and shutdown server if running
@@ -129,7 +134,7 @@ class Video(ipywidgets.DOMWidget):
         # Start server if not already running, update path
         path_served = os.path.dirname(self._filename)
         if not self.server:
-            self.server = server.Server(path=path_served)
+            self.server = server.Server(path=path_served, host=host, port=port)
             self.server.start()
         else:
             self.server.path = path_served
@@ -185,7 +190,7 @@ class Video(ipywidgets.DOMWidget):
 
     #--------------------------------------------
     # Register Python event handlers
-    _known_event_types = []
+    # _known_event_types = []
     def on_event(self, callback, event_type='', remove=False):
         """(un)Register a Python event=-handler functions.
         Default is to register for all event types.  May be called repeatedly to set multiple
@@ -208,8 +213,8 @@ class Video(ipywidgets.DOMWidget):
 
         Set keyword remove=True to unregister an existing callback function.
         """
-        if event_type not in self._known_event_types:
-            self._known_event_types.append(event_type)
+        # if event_type not in self._known_event_types:
+        #     self._known_event_types.append(event_type)
 
         if event_type not in self._event_dispatchers:
             self._event_dispatchers[event_type] = ipywidgets.widget.CallbackDispatcher()
