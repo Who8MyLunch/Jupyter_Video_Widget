@@ -114,7 +114,7 @@ class Video(ipywidgets.DOMWidget):
     def filename(self, fname):
         self.set_filename(fname)
 
-    def set_filename(self, fname, host='localhost', port=0):
+    def set_filename(self, fname, host=None, port=None):
         """Set filename for local video
         """
         if not fname:
@@ -130,6 +130,11 @@ class Video(ipywidgets.DOMWidget):
 
         # Configure internal http server for local file
         self._filename = os.path.realpath(fname)
+
+        if not port:
+            port = 0
+        if not host:
+            host = 'localhost'
 
         # Start server if not already running, update path
         path_served = os.path.dirname(self._filename)

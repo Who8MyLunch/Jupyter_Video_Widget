@@ -201,7 +201,7 @@ define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { retu
 	
 	        //-------------------------------------------------
 	        // Video element event handlers
-	        // frontend --> backend
+	        // https://developer.mozilla.org/en-US/docs/Web/Reference/Events
 	        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 	        this.video.addEventListener('durationchange', this.handle_event.bind(this));
 	        this.video.addEventListener('ended',          this.handle_event.bind(this));
