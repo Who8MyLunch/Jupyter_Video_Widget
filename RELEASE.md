@@ -11,6 +11,7 @@ number in the file version.py, making sure to also remove 'dev' descriptor.
 ```bash
 git add <any new stuff>
 git commit -a
+git push
 ```
 
 Create source and binary distribution files.  Twine will handle registering the project the
