@@ -136,6 +136,7 @@ setup_args = {
         'notebook',
         'ipywidgets>=7.0.0',
         'shortuuid',
+        'ordered-namespace',
     ],
     'packages': find_packages(),
     'zip_safe': False,
