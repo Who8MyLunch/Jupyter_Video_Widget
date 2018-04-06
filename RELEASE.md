@@ -4,6 +4,12 @@ PyPi Instructions: https://packaging.python.org/distributing/#uploading-your-pro
 
 Twin command-line tool for registering and uploading packages: https://github.com/pypa/twine
 
+## Version Numbers
+
+Version number for this project are defined once for Python and again for Javascript:
+- jpy_video/version.py
+- js/package.json
+
 
 Commit code edits to GitHub after making all your awesome changes.  Update version
 number in the file version.py, making sure to also remove 'dev' descriptor.

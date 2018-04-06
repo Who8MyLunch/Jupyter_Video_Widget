@@ -351,6 +351,12 @@ var VideoView = widgets.DOMWidgetView.extend({
                 } else {
                     this.jump_frames(1);
                 }
+            } else if (ev.key == 'ArrowUp') {
+                // Increase play rate
+                this.video.playbackRate *= 2.0;
+            } else if (ev.key == 'ArrowDown') {
+                // Increase play rate
+                this.video.playbackRate /= 2.0;
             }
         }
     },

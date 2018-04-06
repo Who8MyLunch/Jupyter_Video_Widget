@@ -415,6 +415,12 @@ define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { retu
 	                } else {
 	                    this.jump_frames(1);
 	                }
+	            } else if (ev.key == 'ArrowUp') {
+	                // Increase play rate
+	                this.video.playbackRate *= 2.0;
+	            } else if (ev.key == 'ArrowDown') {
+	                // Increase play rate
+	                this.video.playbackRate /= 2.0;
 	            }
 	        }
 	    },
@@ -2021,7 +2027,7 @@ define(["@jupyter-widgets/base"], function(__WEBPACK_EXTERNAL_MODULE_2__) { retu
 
 	module.exports = {
 		"name": "jupyter-video",
-		"version": "0.2.0",
+		"version": "0.4.0",
 		"description": "HTML5 video player widget",
 		"author": "Pierre V. Villeneuve",
 		"license": "MIT",

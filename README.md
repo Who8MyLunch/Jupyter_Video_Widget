@@ -18,6 +18,11 @@ If not already enabled, you'll need to enable the ipywidgets notebook extension 
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
 ```
 
+And if using JupyterLab, additionally run this command:
+
+```bash
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+```
 
 ## Standard Installation
 
@@ -42,6 +47,11 @@ jupyter nbextension install --py --symlink --sys-prefix jpy_video
 jupyter nbextension enable  --py           --sys-prefix jpy_video
 ```
 
+Double check that all extension got installed and enabled:
+```bash
+jupyter nbextension list
+```
+
 
 # Making Changes to JavaScript Code
 
@@ -62,10 +72,12 @@ See the links below for more helpful information:
 
 Note: I found this write-up at npmjs.com very helpful in understanding the recommended folder layout: https://docs.npmjs.com/files/folders.
 
+In general the name jpy_video is used on the Python side, while jupyter-video is used on the Javascriot side.
+
     - Jupyter_Video_Widget/
         - jpy_video/                All Python code lives here
             - static/               Prepared and packaged JS code ends up here
-            - version.py
+            - version.py            Version number (Python side)
             - video.py              Widget Python code
             - server.py             Includes http file server with support for byte range requests
             - compound.py
@@ -79,7 +91,7 @@ Note: I found this write-up at npmjs.com very helpful in understanding the recom
                 - index.js          Only edit to update exported module name (e.g. video.js)
                 - extension.js
             - README.md
-            - package.json          Double check author name, email address, github org., etc.
+            - package.json          Version number (JS side), author name, email address, github org., etc.
             - webpack.config.js     Contains path to static JS folder on the Python side
         - setup.py
         - setup.cfg
