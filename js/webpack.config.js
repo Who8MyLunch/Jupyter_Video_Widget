@@ -1,6 +1,6 @@
 
 var path = require('path');
-var version = require('./package.json').version;
+var npm_version = require('./package.json').version;
 
 // Custom webpack loaders are generally the same for all webpack bundles, hence
 // stored in a separate local variable.
@@ -66,7 +66,7 @@ module.exports = [
             filename: 'index.js',
             path: path.resolve(__dirname, 'dist'),
             libraryTarget: 'amd',
-            publicPath: 'https://unpkg.com/jpy_video@' + version + '/dist/'
+            publicPath: 'https://unpkg.com/jpy_video@' + npm_version + '/dist/'
         },
         devtool: 'source-map',
         module: {

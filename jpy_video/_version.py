@@ -28,7 +28,7 @@ def parse_version(version_info):
         raise ValueError('Expected at least three terms in "version_info": {}'.format(N))
     if N == 3:
         version = tpl3.format(version_info[0], version_info[1], version_info[2])
-    elif N > 3
+    elif N > 3:
         version = tpl4.format(version_info[0], version_info[1], version_info[2], version_info[3])
 
     return version
@@ -42,7 +42,7 @@ version_info = (0, 4, 0, 'dev.0')
 __version__ = parse_version(version_info)
 
 # NPM version pulled directly from package.json
-p = os.path.realname(os.path.dirname(__file__))
+p = os.path.realpath(os.path.dirname(__file__))
 f = os.path.join(p, '..', 'js', 'package.json')
 data = read_json(f)
 
