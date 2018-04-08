@@ -1,6 +1,8 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 
+var version = '~' + require('../package.json').version;
+
 
 // https://remysharp.com/2010/07/21/throttling-function-calls
 // See updated version in above article's comments
@@ -43,9 +45,11 @@ var TimeCodeModel = widgets.HTMLModel.extend({
     defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
         _model_name:   'TimeCodeModel',
         _model_module: 'jupyter-video',
+        _model_module_version: version,
 
         _view_name:    'TimeCodeView',
         _view_module:  'jupyter-video',
+        _view_module_version: version,
     })
 });
 
@@ -54,9 +58,11 @@ var VideoModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
         _model_name:   'VideoModel',
         _model_module: 'jupyter-video',
+        _model_module_version: version,
 
         _view_name:    'VideoView',
         _view_module:  'jupyter-video',
+        _view_module_version: version,
     })
 });
 

@@ -129,11 +129,9 @@ setup_args = {
             'jpy_video/static/index.js',
             'jpy_video/static/index.js.map',
         ]),
+        ('etc/jupyter/nbconfig/notebook.d' , ['jupyter-video.json'])
     ],
     'install_requires': [
-        'ipython',
-        'jupyter',
-        'notebook',
         'ipywidgets>=7.0.0',
         'shortuuid',
         'ordered-namespace',
