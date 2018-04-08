@@ -1,4 +1,6 @@
-var widgets = require('@jupyter-widgets/base');
+var widgets_base = require('@jupyter-widgets/base');
+var widgets_controls = require('@jupyter-widgets/controls');
+
 var _ = require('lodash');
 
 var module_name = require('../package.json').name;
@@ -42,7 +44,11 @@ function zero_pad_two_digits(number) {
 // `_model_module`, and `_view_module`.  When serialiazing entire widget state for embedding,
 // only values different from default will be specified.
 
-var TimeCodeModel = widgets.HTMLModel.extend({
+console.log(widgets_base);
+console.log(widgets_controls);
+
+
+var TimeCodeModel = widgets_controls.HTMLModel.extend({
     defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
         _model_name:          'TimeCodeModel',
         _model_module:         module_name,
@@ -55,7 +61,7 @@ var TimeCodeModel = widgets.HTMLModel.extend({
 });
 
 
-var VideoModel = widgets.DOMWidgetModel.extend({
+var VideoModel = widgets_base.DOMWidgetModel.extend({
     defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
         _model_name:          'VideoModel',
         _model_module:         module_name,
@@ -71,7 +77,7 @@ var VideoModel = widgets.DOMWidgetModel.extend({
 //-----------------------------------------------
 
 // Widget View renders the model to the DOM
-var TimeCodeView = widgets.HTMLView.extend({
+var TimeCodeView = widgets_controls.HTMLView.extend({
     // https://codereview.stackexchange.com/questions/49524/updating-single-view-on-change-of-a-model-in-backbone
     render: function() {
         this.listenTo(this.model, 'change:timecode', this.timecode_changed);
@@ -121,7 +127,7 @@ var TimeCodeView = widgets.HTMLView.extend({
 //-----------------------------------------------
 //-----------------------------------------------
 
-var VideoView = widgets.DOMWidgetView.extend({
+var VideoView = widgets_base.DOMWidgetView.extend({
     render: function() {
         // This project's view is a single <video/> element.
         this.video = document.createElement('video');

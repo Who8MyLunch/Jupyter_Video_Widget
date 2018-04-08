@@ -118,10 +118,7 @@ with open(os.path.join(here, 'jpy_video', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = {
-    # 'name': 'Jupyter_Video_Widget',
     'version': version_ns['__version__'],
-    # 'description': 'A Jupyter HTML5 Video Player Widget',
-    # 'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
         ('share/jupyter/nbextensions/jupyter-video', [

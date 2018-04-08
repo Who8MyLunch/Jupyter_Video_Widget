@@ -4,13 +4,13 @@ import os
 
 #------------------------------------------------
 # Helper functions
-def read_json(fname):
-    """Read JSON-serialized data from file
-    """
-    with open(fname, 'r') as fp:
-        info = json.load(fp)
+# def read_json(fname):
+#     """Read JSON-serialized data from file
+#     """
+#     with open(fname, 'r') as fp:
+#         info = json.load(fp)
 
-    return info
+#     return info
 
 
 
@@ -42,9 +42,9 @@ version_info = (0, 4, 0, 'dev.0')
 __version__ = parse_version(version_info)
 
 # NPM version pulled directly from package.json
-p = os.path.realpath(os.path.dirname(__file__))
-f = os.path.join(p, '..', 'js', 'package.json')
-data = read_json(f)
+# p = os.path.realpath(os.path.dirname('.'))
+# f = os.path.join(p, '..', 'js', 'package.json')
+# data = read_json(f)
 
-__npm_module_version__ = data['version']
-__npm_module_name__ = data['name']
+__npm_module_version__ = __version__
+__npm_module_name__ = 'jupyter-video'

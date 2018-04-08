@@ -18,12 +18,11 @@ If not already enabled, you'll need to enable the ipywidgets notebook extension 
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
 ```
 
-And if using JupyterLab, additionally run these commands:
+And if using JupyterLab, additionally run this commands:
 
 ```bash
 jupyter labextension install @jupyter-widgets/jupyterlab-manager
 
-jupyter labextension install jupyter-video
 ```
 
 ## Standard Installation
@@ -33,7 +32,10 @@ Use pip to install:
 ```bash
 pip install Jupyter-Video-Widget
 
-jupyter nbextension enable --py --sys-prefix jpy_video
+jupyter nbextension install --py --sys-prefix jpy_video
+jupyter nbextension enable  --py --sys-prefix jpy_video
+
+jupyter labextension install jupyter-video
 ```
 
 
@@ -45,11 +47,12 @@ git clone git@github.com:Who8MyLunch/Jupyter_Video_Widget.git
 cd Jupyter_Video_Widget
 
 pip install -e .
-jupyter nbextension install --py --symlink --sys-prefix jpy_video
-jupyter nbextension enable  --py           --sys-prefix jpy_video
+jupyter nbextension install --symlink --py --sys-prefix jpy_video
+jupyter nbextension enable            --py --sys-prefix jpy_video
 ```
 
 Double check that all extension got installed and enabled:
+
 ```bash
 jupyter nbextension list
 ```
@@ -61,7 +64,7 @@ And if using JupyterLab, additionally run these commands:
 jupyter labextension install @jupyter-widgets/jupyterlab-manager
 ```
 
-And then run this from the js directory:
+And then run this from this project's js directory:
 
 ```bash
 jupyter labextension install .
