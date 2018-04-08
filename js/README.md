@@ -9,5 +9,7 @@ Information: https://docs.npmjs.com/files/package.json
 - [node](http://nodejs.org/)
 
 ```bash
-npm install --save 
+npm install --save
+
+jupyter labextension install ??????
 ```

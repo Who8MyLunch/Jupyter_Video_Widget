@@ -1,4 +1,5 @@
 
+var path = require('path');
 var version = require('./package.json').version;
 
 // Custom webpack loaders are generally the same for all webpack bundles, hence
@@ -20,7 +21,7 @@ module.exports = [
         entry: './src/extension.js',
         output: {
             filename: 'extension.js',
-            path: '../jpy_video/static',
+            path: path.resolve(__dirname, '..', 'jpy_video', 'static'),
             libraryTarget: 'amd'
         }
     },
@@ -33,7 +34,7 @@ module.exports = [
         entry: './src/index.js',
         output: {
             filename: 'index.js',
-            path: '../jpy_video/static',
+            path: path.resolve(__dirname, '..', 'jpy_video', 'static'),
             libraryTarget: 'amd'
         },
         devtool: 'source-map',
@@ -58,9 +59,9 @@ module.exports = [
         entry: './src/embed.js',
         output: {
             filename: 'index.js',
-            path: './dist/',
+            path: path.resolve(__dirname, './dist/'),
             libraryTarget: 'amd',
-            //publicPath: 'https://unpkg.com/jpy_video@' + version + '/dist/'
+            publicPath: 'https://unpkg.com/jpy_video@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {
