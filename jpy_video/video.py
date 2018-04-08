@@ -7,7 +7,7 @@ import ipywidgets
 import traitlets
 import shortuuid
 
-from ._version import __version__
+from ._version import __npm_module_version__, __npm_module_name__
 from ordered_namespace import Struct
 from . import server
 
@@ -20,12 +20,12 @@ class TimeCode(ipywidgets.HTML):
     """Nicely-formatted timecode text display
     """
     _view_name =   traitlets.Unicode('TimeCodeView').tag(sync=True)
-    _view_module = traitlets.Unicode('jupyter-video').tag(sync=True)
-    _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
+    _view_module = traitlets.Unicode(__npm_module_name__).tag(sync=True)
+    _view_module_version = traitlets.Unicode('^' + __npm_module_version__).tag(sync=True)
 
     _model_name =   traitlets.Unicode('TimeCodeModel').tag(sync=True)
-    _model_module = traitlets.Unicode('jupyter-video').tag(sync=True)
-    _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
+    _model_module = traitlets.Unicode(__npm_module_name__).tag(sync=True)
+    _model_module_version = traitlets.Unicode('^' + __npm_module_version__).tag(sync=True)
 
     # Public information
     timecode = traitlets.Float().tag(sync=True)
@@ -51,12 +51,12 @@ class Video(ipywidgets.DOMWidget):
     """HTML5 video player as a Jupyter widget
     """
     _view_name =   traitlets.Unicode('VideoView').tag(sync=True)
-    _view_module = traitlets.Unicode('jupyter-video').tag(sync=True)
-    _view_module_version = traitlets.Unicode(__version__).tag(sync=True)
+    _view_module = traitlets.Unicode(__npm_module_name__).tag(sync=True)
+    _view_module_version = traitlets.Unicode('^' + __npm_module_version__).tag(sync=True)
 
     _model_name =   traitlets.Unicode('VideoModel').tag(sync=True)
-    _model_module = traitlets.Unicode('jupyter-video').tag(sync=True)
-    _model_module_version = traitlets.Unicode(__version__).tag(sync=True)
+    _model_module = traitlets.Unicode(__npm_module_name__).tag(sync=True)
+    _model_module_version = traitlets.Unicode('^' + __npm_module_version__).tag(sync=True)
 
     # Private information
     _method = traitlets.List().tag(sync=True)

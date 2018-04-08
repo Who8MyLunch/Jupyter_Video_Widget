@@ -4,9 +4,14 @@ var version = require('./package.json').version;
 
 // Custom webpack loaders are generally the same for all webpack bundles, hence
 // stored in a separate local variable.
-var loaders = [
-    { test: /\.json$/, loader: 'json-loader' },
-];
+// var loaders = [
+//     { test: /\.json$/, loader: 'json-loader' },
+// ];
+
+var rules = [
+    { test: /\.css$/, use: ['style-loader', 'css-loader']}
+]
+
 
 
 module.exports = [
@@ -39,7 +44,7 @@ module.exports = [
         },
         devtool: 'source-map',
         module: {
-            loaders: loaders
+            rules: rules
         },
         externals: ['@jupyter-widgets/base',
                     '@jupyter-widgets/controls']
@@ -59,13 +64,13 @@ module.exports = [
         entry: './src/embed.js',
         output: {
             filename: 'index.js',
-            path: path.resolve(__dirname, './dist/'),
+            path: path.resolve(__dirname, 'dist'),
             libraryTarget: 'amd',
             publicPath: 'https://unpkg.com/jpy_video@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {
-            loaders: loaders
+            rules: rules
         },
         externals: ['@jupyter-widgets/base',
                     '@jupyter-widgets/controls']

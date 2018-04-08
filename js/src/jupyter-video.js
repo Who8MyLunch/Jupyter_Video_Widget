@@ -1,7 +1,8 @@
 var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
+var _ = require('lodash');
 
-var version = '~' + require('../package.json').version;
+var module_name = require('../package.json').name;
+var module_version = require('../package.json').version;
 
 
 // https://remysharp.com/2010/07/21/throttling-function-calls
@@ -43,26 +44,26 @@ function zero_pad_two_digits(number) {
 
 var TimeCodeModel = widgets.HTMLModel.extend({
     defaults: _.extend(_.result(this, 'widgets.HTMLModel.prototype.defaults'), {
-        _model_name:   'TimeCodeModel',
-        _model_module: 'jupyter-video',
-        _model_module_version: version,
+        _model_name:          'TimeCodeModel',
+        _model_module:         module_name,
+        _model_module_version: module_version,
 
-        _view_name:    'TimeCodeView',
-        _view_module:  'jupyter-video',
-        _view_module_version: version,
+        _view_name:          'TimeCodeView',
+        _view_module:         module_name,
+        _view_module_version: module_version,
     })
 });
 
 
 var VideoModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
-        _model_name:   'VideoModel',
-        _model_module: 'jupyter-video',
-        _model_module_version: version,
+        _model_name:          'VideoModel',
+        _model_module:         module_name,
+        _model_module_version: module_version,
 
-        _view_name:    'VideoView',
-        _view_module:  'jupyter-video',
-        _view_module_version: version,
+        _view_name:          'VideoView',
+        _view_module:         module_name,
+        _view_module_version: module_version,
     })
 });
 
