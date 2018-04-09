@@ -442,14 +442,13 @@ var VideoView = widgets_base.DOMWidgetView.extend({
         this.model.set('current_time', this.video['currentTime']);
         this.touch();
 
-        var delta_time_fast = 100;   // milliseconds
+        var delta_time_fast = 25;   // milliseconds
         if (this.enable_fast_time_update) {
             setTimeout(this.fast_time_update.bind(this), delta_time_fast);
         }
     },
 
     handle_play: function(ev) {
-        // console.log(ev);
         // Don't respond to current_time events while playing. The video itself is the source of
         // those events, and responding to them will only cause hard-to-debug timming trouble.
         this.stopListening(this.model, 'change:current_time');
