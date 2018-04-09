@@ -75,6 +75,13 @@ class VideoPlayer(ipywidgets.VBox):
         self._timebase = timebase
         self.wid_video = Video(source, timebase=timebase)
 
+        # Video event handlers
+        self.wid_video.on_displayed(self._handle_displayed)
+        self.wid_video.on_event(self._handle_loaded_metadata, 'loadedmetadata')
+        self.wid_video.on_event(self._handle_duration_change, 'durationchange')
+        self.wid_video.on_event(self._handle_rate_change, 'ratechange')
+
+        # Define additional widget components
         # self.wid_video.layout.width = '100%'  # scale to fit inside parent element
         self.wid_video.layout.align_self = 'center'
         self.wid_video.layout.border = '1px solid grey'
@@ -83,49 +90,31 @@ class VideoPlayer(ipywidgets.VBox):
 
         # wid_button = ipywidgets.Button(icon='play')  # http://fontawesome.io/icon/pause/
 
-        # self.wid_slider = ipywidgets.FloatSlider(min=0, max=60, step=timebase,
-        #                                          continuous_update=True, orientation='horizontal',
-        #                                          readout=False,
-        #                                          slider_color='blue')
-        # self.wid_slider.layout.width = '50%'
+        # Progress bar/slider
+        self.wid_slider = ipywidgets.FloatSlider(min=0, max=1, step=timebase,
+                                                 continuous_update=True, orientation='horizontal',
+                                                 readout=False,
+                                                 slider_color='blue')
+        self.wid_slider.layout.width = '50%'
 
-        self.wid_progress = ipywidgets.FloatProgress(value=0, min=0, max=1.0, step=timebase,
-                                                     description='', bar_style='info',
-                                                     orientation='horizontal')
-
+        # Text info
         self.wid_info = MonoText()
 
-        # More parts?
-        # timebase, playback rate,
-
-        # Setup event handlers
-        self.wid_video.on_displayed(self._handle_displayed)
-        self.wid_video.on_event(self._handle_loaded_metadata, 'loadedmetadata')
-        self.wid_video.on_event(self._handle_duration_change, 'durationchange')
-        self.wid_video.on_event(self._handle_rate_change, 'ratechange')
-
         # Assemble the parts
+        self.wid_box = ipywidgets.HBox(children=[self.wid_timecode, self.wid_slider])
+        # self.wid_controls_B = ipywidgets.HBox(children=[self.wid_timecode,
+        #                                               self.wid_slider,
+        #                                               self.wid_info])
 
-        # self.wid_controls = ipywidgets.HBox(children=[self.wid_timecode, self.wid_slider])
-        self.wid_controls = ipywidgets.HBox(children=[self.wid_timecode,
-                                                      self.wid_progress,
-                                                      self.wid_info])
-
-        self._update_info()
-
-        self.children = [self.wid_video, self.wid_controls]
+        self.children = [self.wid_video, self.wid_box, self.wid_info]
 
         # Link widgets at front end
-        # ipywidgets.jslink((self.wid_video, 'current_time'), (self.wid_slider, 'value'))
-        ipywidgets.jsdlink((self.wid_video, 'current_time'), (self.wid_progress, 'value'))
+        # ipywidgets.jsdlink((self.wid_video, 'current_time'), (self.wid_progress, 'value'))
+        ipywidgets.jslink((self.wid_video, 'current_time'), (self.wid_slider, 'value'))
         ipywidgets.jsdlink((self.wid_video, 'current_time'), (self.wid_timecode, 'timecode'))
 
     def _update_info(self):
-        tpl = """\
-Source:   {}
-Timebase: {:.1f} fps
-Playback: {}x
-"""
+        tpl = "Source: {} | Timebase: {:.1f} fps | Playback: {}x"
 
         try:
             rate = self.properties.playbackRate
@@ -139,7 +128,6 @@ Playback: {}x
         self.wid_info.text = text
 
     #--------------------------------------------
-    # wid_video.on_event(handle_any)
     def _handle_displayed(self, *args, **kwargs):
         """Do stuff that can only be done after widget is displayed
         """
@@ -148,7 +136,7 @@ Playback: {}x
     def _handle_duration_change(self, wid, properties):
         """Update anything that depends on video duration
         """
-        self.wid_progress.max = properties.duration
+        self.wid_slider.max = properties.duration
 
     def _handle_rate_change(self, wid, properties):
         """Update anything that depends on playback rate
@@ -162,6 +150,7 @@ Playback: {}x
         self.wid_video.layout.width = '{}px'.format(width)
         self.layout.width = '{}px'.format(width + 5)
         self.layout.align_self = 'center'
+        self._update_info()
 
     def display(self):
         IPython.display.display(self)

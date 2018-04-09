@@ -2,16 +2,6 @@
 import json
 import os
 
-#------------------------------------------------
-# Helper functions
-# def read_json(fname):
-#     """Read JSON-serialized data from file
-#     """
-#     with open(fname, 'r') as fp:
-#         info = json.load(fp)
-
-#     return info
-
 
 
 def parse_version(version_info):
@@ -36,15 +26,9 @@ def parse_version(version_info):
 #------------------------------------------------
 #------------------------------------------------
 
-# Python version
 version_info = (0, 4, 0, 'dev.0')
 
 __version__ = parse_version(version_info)
 
-# NPM version pulled directly from package.json
-# p = os.path.realpath(os.path.dirname('.'))
-# f = os.path.join(p, '..', 'js', 'package.json')
-# data = read_json(f)
-
-__npm_module_version__ = __version__
+__npm_module_version__ = __version__   # Make sure package.json contains exactly the same version number
 __npm_module_name__ = 'jupyter-video'

@@ -1,4 +1,4 @@
-define(["@jupyter-widgets/base","@jupyter-widgets/controls"], function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) { return /******/ (function(modules) { // webpackBootstrap
+define(["@jupyter-widgets/base","@jupyter-widgets/controls"], function(__WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -127,10 +127,10 @@ module.exports['version'] = __webpack_require__(0).version;
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var widgets_base = __webpack_require__(3);
-var widgets_controls = __webpack_require__(4);
+var _ = __webpack_require__(3);
 
-var _ = __webpack_require__(5);
+var widgets_base = __webpack_require__(6);
+var widgets_controls = __webpack_require__(7);
 
 var module_name = __webpack_require__(0).name;
 var module_version = __webpack_require__(0).version;
@@ -310,7 +310,7 @@ var VideoView = widgets_base.DOMWidgetView.extend({
         // Handle keyboard event via containing div element.
         this.video.onloadedmetadata = function(ev) {
             // Parent element only knowable after DOM is rendered
-            var container = ev.target.closest('div.output_area');
+            var container = ev.target.closest('div');
             container.tabIndex = 0
 
             function div_focus() {
@@ -541,18 +541,6 @@ module.exports = {
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17641,10 +17629,10 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(7)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(5)(module)))
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports) {
 
 var g;
@@ -17671,7 +17659,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 7 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -17697,6 +17685,18 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
 
 /***/ })
 /******/ ])});;

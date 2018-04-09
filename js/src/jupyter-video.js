@@ -1,7 +1,7 @@
+var _ = require('lodash');
+
 var widgets_base = require('@jupyter-widgets/base');
 var widgets_controls = require('@jupyter-widgets/controls');
-
-var _ = require('lodash');
 
 var module_name = require('../package.json').name;
 var module_version = require('../package.json').version;
@@ -181,7 +181,7 @@ var VideoView = widgets_base.DOMWidgetView.extend({
         // Handle keyboard event via containing div element.
         this.video.onloadedmetadata = function(ev) {
             // Parent element only knowable after DOM is rendered
-            var container = ev.target.closest('div.output_area');
+            var container = ev.target.closest('div');
             container.tabIndex = 0
 
             function div_focus() {
