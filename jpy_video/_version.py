@@ -26,7 +26,7 @@ def parse_version(version_info):
 #------------------------------------------------
 #------------------------------------------------
 
-version_info = (0, 4, 0, 'dev.0')
+version_info = (0, 4, 0, 'dev.1')
 
 __version__ = parse_version(version_info)
 
