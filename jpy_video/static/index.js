@@ -69,7 +69,7 @@ define(["@jupyter-widgets/base","@jupyter-widgets/controls"], function(__WEBPACK
 
 module.exports = {
 	"name": "jupyter-video",
-	"version": "0.4.0-dev.0",
+	"version": "0.4.0-dev.1",
 	"description": "HTML5 video player widget",
 	"author": "Pierre V. Villeneuve",
 	"license": "MIT",
@@ -442,7 +442,7 @@ var VideoView = widgets_base.DOMWidgetView.extend({
         this.model.set('current_time', this.video['currentTime']);
         this.touch();
 
-        var delta_time_fast = 25;   // milliseconds
+        var delta_time_fast = 25;   // milliseconds.  100 ms is too slow, 25 ms seems nice...
         if (this.enable_fast_time_update) {
             setTimeout(this.fast_time_update.bind(this), delta_time_fast);
         }
