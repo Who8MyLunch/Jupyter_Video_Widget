@@ -120,6 +120,7 @@ with open(os.path.join(here, 'jpy_video', '_version.py')) as f:
 setup_args = {
     'version': version_ns['__version__'],
     'include_package_data': True,
+    'long_description_content_type': "text/markdown",
     'data_files': [
         ('share/jupyter/nbextensions/jupyter-video', [
             'jpy_video/static/extension.js',
